@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .blog-container {
+    max-width: 800px;
+    margin: auto;
+  }
+
+  .blog-post {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease;
+  }
+
+  .blog-post:hover {
+    transform: translateY(-5px);
+  }
+
+  .blog-title {
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .blog-content {
+    color: #555;
+    margin-bottom: 15px;
+  }
+
+  .author {
+    font-size: 0.9em;
+    color: #aaa;
+  }
+  .blog-post-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  
+  .blog-post {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease;
+    cursor: pointer; /* 鼠标指针变为手形 */
+  }

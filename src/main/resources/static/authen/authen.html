@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户认证系统</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 登录表单 -->
+        <div id="login-form" class="auth-form">
+            <h2>用户登录</h2>
+            <form id="login">
+                <div class="form-group">
+                    <label for="login-username">用户名</label>
+                    <input type="text" id="login-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">密码</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit">登录</button>
+                <p class="form-footer">还没有账号？<a href="#" id="show-register">立即注册</a></p>
+            </form>
+        </div>
+
+        <!-- 注册表单 -->
+        <div id="register-form" class="auth-form" style="display: none;">
+            <h2>用户注册</h2>
+            <form id="register">
+                <div class="form-group">
+                    <label for="register-username">用户名</label>
+                    <input type="text" id="register-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">电子邮箱</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">密码</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm-password">确认密码</label>
+                    <input type="password" id="register-confirm-password" required>
+                </div>
+                <button type="submit">注册</button>
+                <p class="form-footer">已有账号？<a href="#" id="show-login">立即登录</a></p>
+            </form>
+        </div>
+
+        <!-- 仪表盘 -->
+        <div id="dashboard" class="auth-form" style="display: none;">
+            <h2>用户仪表盘</h2>
+            <div class="user-info">
+                <p>欢迎您, <span id="welcome-username">用户</span></p>
+                <p>用户ID: <span id="user-id"></span></p>
+                <p>邮箱: <span id="user-email"></span></p>
+            </div>
+            <button id="logout-btn">退出登录</button>
+        </div>
+
+        <!-- 消息提示 -->
+        <div id="message" class="message-hidden"></div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>
