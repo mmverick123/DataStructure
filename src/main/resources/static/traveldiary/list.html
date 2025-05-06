@@ -4,33 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>旅行日记</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="liststyle.css">
 </head>
 <body>
-  <div class="blog-container">
-    <a href="diary.html" class="blog-post-link">
-      <div class="blog-post">
-        <h2 class="blog-title">title1</h2>
-        <p class="blog-content">text1</p>
-        <span class="author">iwenwiki</span>
-      </div>
-    </a>
-
-    <a href="diary.html" class="blog-post-link">
-      <div class="blog-post">
-        <h2 class="blog-title">title2</h2>
-        <p class="blog-content">text2</p>
-        <span class="author">iwenwiki</span>
-      </div>
-    </a>
-
-    <a href="diary.html" class="blog-post-link">
-      <div class="blog-post">
-        <h2 class="blog-title">title3</h2>
-        <p class="blog-content">text3</p>
-        <span class="author">iwenwiki</span>
-      </div>
-    </a>
+  <header>
+    <div class="user-info">
+        <span id="username"></span>
+        <button id="logout-btn">退出登录</button>
+    </div>
+  </header>
+  <div class="page-container">
+    <div class="sort-controls">
+      <button id="sort-views" class="sort-btn active">按浏览量排序</button>
+      <button id="sort-rating" class="sort-btn">按评分排序</button>
+    </div>
+    <div class="blog-container" id="blog-container">
+      <!-- 日记列表将通过JS动态生成 -->
+    </div>
   </div>
+  <footer>
+    <p>© 2025 旅游分享平台</p>
+  </footer>
+  <script src="getlist.js"></script>
 </body>
 </html>

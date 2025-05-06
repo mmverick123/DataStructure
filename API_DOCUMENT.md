@@ -56,63 +56,58 @@
 ## 日记相关接口
 
 ### 获取所有日记
-- **URL**: `/api/diaries`
+- **URL**: `/api/diaries/all`
 - **方法**: GET
-- **描述**: 获取所有日记，支持分页、排序
+- **描述**: 获取所有日记
 - **参数**:
-  - `page`: 页码，默认0
-  - `size`: 每页数量，默认10
-  - `sortBy`: 排序字段，默认createdAt
-  - `direction`: 排序方向(asc或desc)，默认desc
   - `orderType`: 排序类型，可选值: "views"(按浏览量排序), "rating"(按评分排序)
 - **响应**:
   ```json
-  {
-    "content": [
-      {
+  [
+    {
+      "id": 1,
+      "title": "日记标题",
+      "content": "日记内容",
+      "createdAt": "2023-01-01T12:00:00",
+      "updatedAt": "2023-01-01T12:00:00",
+      "views": 10,
+      "averageRating": 4.5,
+      "ratingCount": 2,
+      "user": {
         "id": 1,
-        "title": "日记标题",
-        "content": "日记内容",
-        "createdAt": "2023-01-01T12:00:00",
-        "updatedAt": "2023-01-01T12:00:00",
-        "views": 10,
-        "averageRating": 4.5,
-        "ratingCount": 2,
-        "user": {
-          "id": 1,
-          "username": "用户名",
-          "email": "邮箱",
-          "profilePicture": "头像URL",
-          "bio": "个人简介"
-        }
-      }
-    ],
-    "pageable": {
-      "pageNumber": 0,
-      "pageSize": 10,
-      "sort": {
-        "sorted": true,
-        "unsorted": false,
-        "empty": false
+        "username": "用户名",
+        "email": "邮箱"
       },
-      "offset": 0,
-      "paged": true,
-      "unpaged": false
-    },
-    "totalElements": 1,
-    "totalPages": 1,
-    "last": true,
-    "first": true,
-    "size": 10,
-    "number": 0,
-    "sort": {
-      "sorted": true,
-      "unsorted": false,
-      "empty": false
-    },
-    "numberOfElements": 1,
-    "empty": false
-  }
+      "mediaList": [
+        {
+          "id": 1,
+          "fileName": "image.jpg",
+          "fileType": "image/jpeg",
+          "fileUrl": "/api/media/files/image.jpg",
+          "fileSize": 1024,
+          "mediaType": "IMAGE"
+        },
+        {
+          "id": 2,
+          "fileName": "video.mp4",
+          "fileType": "video/mp4",
+          "fileUrl": "/api/media/files/video.mp4",
+          "fileSize": 10240,
+          "mediaType": "VIDEO"
+        }
+      ],
+      "ratings": [
+        {
+          "id": 1,
+          "score": 4.5,
+          "user": {
+            "id": 2,
+            "username": "评分用户名"
+          }
+        }
+      ]
+    }
+  ]
   ```
 
 ### 获取日记详情
@@ -125,8 +120,7 @@
 - **URL**: `/api/diaries/user/{userId}`
 - **方法**: GET
 - **描述**: 获取指定用户的所有日记
-- **参数**: 同获取所有日记接口
-- **响应**: 同获取所有日记接口
+- **响应**: 日记对象列表
 
 ### 创建日记
 - **URL**: `/api/diaries`
@@ -173,28 +167,86 @@
 ### 上传媒体文件
 - **URL**: `/api/media/upload/{diaryId}`
 - **方法**: POST
-- **描述**: 为指定日记上传媒体文件(图片/视频)
-- **权限**: 需要认证，只能为自己的日记上传
-- **请求**: 表单数据，包含文件字段"file"
-- **响应**: 上传的媒体对象
+- **描述**: 为指定日记上传媒体文件(图片/视频)，仅支持JPEG图片和MP4视频格式
+- **路径参数**:
+  - `diaryId`: 日记ID，必须是当前用户拥有的日记
+- **请求头**:
+  - `Content-Type`: `multipart/form-data`
+  - `Authorization`: `Bearer <token>`（必需，用于认证）
+- **请求体（表单数据）**:
+  - `file`: （必需）媒体文件，文件大小限制为10MB
+- **错误情况**:
+  - 401: 未授权 - 用户未登录或token无效
+  - 400: 请求错误 - 日记不存在、不是日记的拥有者、文件格式不支持
+  - 413: 文件过大 - 超过10MB限制
+- **响应**: 
+  ```json
+  {
+    "id": 1,
+    "fileName": "d8e8fca2-dc0f-4a9e-8431-6092f8571b6c_image.jpg",
+    "fileType": "image/jpeg",
+    "fileUrl": "/api/media/files/d8e8fca2-dc0f-4a9e-8431-6092f8571b6c_image.jpg",
+    "fileSize": 1024,
+    "mediaType": "IMAGE"
+  }
+  ```
 
 ### 获取媒体文件
 - **URL**: `/api/media/files/{fileName}`
 - **方法**: GET
-- **描述**: 获取媒体文件
-- **响应**: 媒体文件的二进制数据
+- **描述**: 获取媒体文件，仅支持JPEG图片和MP4视频格式
+- **路径参数**:
+  - `fileName`: 媒体文件名，包含扩展名
+- **响应头**:
+  - `Content-Type`: 根据文件类型动态设置（`image/jpeg`或`video/mp4`）
+  - `Content-Disposition`: `inline; filename="文件名"`
+- **错误情况**:
+  - 404: 文件不存在
+  - 400: 不支持的文件类型
+- **响应**: 媒体文件的二进制数据（图片或视频）
 
 ### 获取日记的媒体文件
 - **URL**: `/api/media/diary/{diaryId}`
 - **方法**: GET
-- **描述**: 获取指定日记的所有媒体文件
-- **响应**: 媒体对象列表
+- **描述**: 获取指定日记的所有媒体文件，结果按类型排序（所有图片在前，所有视频在后）
+- **路径参数**:
+  - `diaryId`: 日记ID
+- **错误情况**:
+  - 400: 日记不存在
+- **响应**: 
+  ```json
+  [
+    {
+      "id": 1,
+      "fileName": "d8e8fca2-dc0f-4a9e-8431-6092f8571b6c_image.jpg",
+      "fileType": "image/jpeg",
+      "fileUrl": "/api/media/files/d8e8fca2-dc0f-4a9e-8431-6092f8571b6c_image.jpg",
+      "fileSize": 1024,
+      "mediaType": "IMAGE"
+    },
+    {
+      "id": 2,
+      "fileName": "a1e0f78b-dc0f-4a9e-8431-6092f8571b6c_video.mp4",
+      "fileType": "video/mp4",
+      "fileUrl": "/api/media/files/a1e0f78b-dc0f-4a9e-8431-6092f8571b6c_video.mp4",
+      "fileSize": 10240,
+      "mediaType": "VIDEO"
+    }
+  ]
+  ```
 
 ### 删除媒体文件
 - **URL**: `/api/media/{mediaId}`
 - **方法**: DELETE
 - **描述**: 删除媒体文件
+- **路径参数**:
+  - `mediaId`: 媒体文件ID
+- **请求头**:
+  - `Authorization`: `Bearer <token>`（必需，用于认证）
 - **权限**: 需要认证，只能删除自己的日记的媒体文件
+- **错误情况**:
+  - 401: 未授权 - 用户未登录或token无效
+  - 400: 媒体文件不存在或不是日记的拥有者
 - **响应**:
   ```json
   {

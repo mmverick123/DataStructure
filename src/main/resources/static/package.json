@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "json-server": "^0.17.3"
+  },
+  "scripts": {"mock-api":"json-server --watch mock-api/db.json --routes mock-api/routes.json --middlewares mock-api/middleware.js --port 8081"}
+}

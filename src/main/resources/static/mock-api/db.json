@@ -1,0 +1,114 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "testuser",
+      "email": "test@example.com",
+      "password": "test123"
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "title": "First Post",
+      "author": "testuser",
+      "content": "This is my first post"
+    }
+  ],
+  "diaries": [
+    {
+      "id": 1,
+      "title": "春日随笔",
+      "content": "今天阳光明媚，心情格外舒畅，走在林荫小路上，仿佛时间也慢了下来。",
+      "createdAt": "2023-03-21T09:30:00",
+      "updatedAt": "2023-03-21T10:00:00",
+      "views": 23,
+      "averageRating": 4.7,
+      "ratingCount": 3,
+      "user": {
+        "id": 1,
+        "username": "sunny_day",
+        "email": "sunny@example.com"
+      },
+      "mediaList": [
+        {
+          "id": 1,
+          "fileName": "spring_walk.jpg",
+          "fileType": "image/jpeg",
+          "fileUrl": "/api/media/files/spring_walk.jpg",
+          "fileSize": 2048,
+          "mediaType": "IMAGE"
+        }
+      ],
+      "ratings": [
+        {
+          "id": 1,
+          "score": 5,
+          "user": {
+            "id": 2,
+            "username": "reader1"
+          }
+        },
+        {
+          "id": 2,
+          "score": 4.5,
+          "user": {
+            "id": 3,
+            "username": "nature_lover"
+          }
+        },
+        {
+          "id": 3,
+          "score": 4.6,
+          "user": {
+            "id": 4,
+            "username": "peaceful_mind"
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "雨夜沉思",
+      "content": "夜晚的雨声中，我开始思考最近的生活节奏，也许该放慢脚步，多听听自己的心声。",
+      "createdAt": "2023-06-11T20:45:00",
+      "updatedAt": "2023-06-11T21:15:00",
+      "views": 45,
+      "averageRating": 4.3,
+      "ratingCount": 2,
+      "user": {
+        "id": 2,
+        "username": "rainwalker",
+        "email": "rain@example.com"
+      },
+      "mediaList": [
+        {
+          "id": 2,
+          "fileName": "rain_night.mp4",
+          "fileType": "video/mp4",
+          "fileUrl": "/api/media/files/rain_night.mp4",
+          "fileSize": 512000,
+          "mediaType": "VIDEO"
+        }
+      ],
+      "ratings": [
+        {
+          "id": 4,
+          "score": 4.2,
+          "user": {
+            "id": 1,
+            "username": "sunny_day"
+          }
+        },
+        {
+          "id": 5,
+          "score": 4.4,
+          "user": {
+            "id": 3,
+            "username": "nature_lover"
+          }
+        }
+      ]
+    }
+  ]
+}

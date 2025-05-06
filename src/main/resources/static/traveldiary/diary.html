@@ -4,95 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>日记详情</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    .diary-container {
-      max-width: 800px;
-      margin: auto;
-      padding: 40px 20px;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .diary-title {
-      font-size: 2em;
-      color: #333;
-      margin-bottom: 20px;
-    }
-
-    .diary-content {
-      font-size: 1.1em;
-      line-height: 1.8;
-      color: #555;
-    }
-
-    .diary-author {
-      font-size: 0.9em;
-      color: #aaa;
-      margin-top: 30px;
-      display: block;
-    }
-
-    .back-button {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #007BFF;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
-    }
-
-    .back-button:hover {
-      background-color: #0056b3;
-    }
-    .image-gallery {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 15px;
-        margin-bottom: 30px;
-    }
-
-    .diary-image {
-        max-width: 100%;
-        height: auto;
-        border-radius: 8px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-        transition: transform 0.2s ease;
-    }
-
-    .diary-image:hover {
-        transform: scale(1.05);
-    }
-  </style>
+  <link rel="stylesheet" href="diarystyle.css">
 </head>
 <body>
-  <div class="diary-container">
-    <!-- 日记标题 -->
-    <h1 class="diary-title">这里是日记标题</h1>
-
-    <!-- 日记内容 -->
-    <p class="diary-content">
-      这里是日记的详细内容。你可以在这里书写旅行过程中的所见所感，
-      比如遇到的人、看到的风景、发生的故事等等。文字会自动换行，
-      并保持良好的阅读体验。
-    </p>
-    <!-- 图片区域 -->
-    <div class="image-gallery">
-        <img src="../practice/资源库/OIP-C.jpg" alt="旅行风景图1" class="diary-image">
-        <img src="../practice/资源库/R-C.jpg" alt="旅行风景图2" class="diary-image">
-        <img src="../practice/资源库/P-C (1).jpg" alt="旅行风景图3" class="diary-image">
+  <header>
+    <div class="user-info">
+        <span id="username"></span>
+        <button id="logout-btn">退出登录</button>
     </div>
-
-    <!-- 作者与时间 -->
-    <span class="diary-author">作者：iwenwiki &nbsp;|&nbsp; 时间：2025年4月5日</span>
-
-    <!-- 返回列表按钮 -->
-    <br/>
-    <a href="list.html" class="back-button">返回列表</a>
+  </header>
+  <div class="diary-container" id="diary-container">
+    <!-- 加载状态 -->
+    <div id="loading" class="loading">加载中...</div>
+    
+    <!-- 日记内容将通过JS动态生成 -->
   </div>
+  <script src="diary.js"></script>
 </body>
 </html>

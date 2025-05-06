@@ -1,24 +1,23 @@
 package com.traveldiary.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.traveldiary.model.Diary;
 import com.traveldiary.model.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import java.util.Optional;
 
 public interface DiaryService {
     Diary createDiary(Diary diary, User user);
     
     Optional<Diary> getDiaryById(Long id);
     
-    Page<Diary> getDiariesByUser(User user, Pageable pageable);
+    List<Diary> getDiariesByUser(User user);
     
-    Page<Diary> getAllDiaries(Pageable pageable);
+    List<Diary> getAllDiaries();
     
-    Page<Diary> getDiariesOrderByViews(Pageable pageable);
+    List<Diary> getDiariesOrderByViews();
     
-    Page<Diary> getDiariesOrderByRating(Pageable pageable);
+    List<Diary> getDiariesOrderByRating();
     
     Diary updateDiary(Diary diary);
     

@@ -54,6 +54,10 @@
 5. 访问应用
    打开浏览器，访问`http://localhost:8081`
 
+## 测试数据
+
+系统在首次启动时会自动从`src/main/resources/static/mock-api/db.json`文件中加载初始测试数据，包括用户、日记、媒体文件和评分信息。这些测试数据只有在数据库为空时才会被加载，如果数据库中已有数据则会跳过初始化过程。
+
 ## API文档
 
 详细的API文档可以在[API_DOCUMENT.md](API_DOCUMENT.md)中找到。

@@ -1,12 +1,21 @@
 package com.traveldiary.model;
 
-import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "users",
@@ -14,6 +23,7 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
         })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,11 +41,6 @@ public class User {
     @NotBlank
     @Size(max = 120)
     private String password;
-
-    private String profilePicture;
-
-    @Size(max = 500)
-    private String bio;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Diary> diaries = new HashSet<>();

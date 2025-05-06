@@ -1,17 +1,32 @@
 package com.traveldiary.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 @Entity
 @Table(name = "diaries")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Diary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -112,5 +127,33 @@ public class Diary {
     
     public void setContent(String content) {
         this.content = content;
+    }
+    
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+    
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+    
+    public int getViews() {
+        return views;
+    }
+    
+    public double getAverageRating() {
+        return averageRating;
+    }
+    
+    public int getRatingCount() {
+        return ratingCount;
+    }
+    
+    public List<Media> getMediaList() {
+        return mediaList;
+    }
+    
+    public Set<Rating> getRatings() {
+        return ratings;
     }
 } 

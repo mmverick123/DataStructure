@@ -1,0 +1,6 @@
+{
+    "watch": "mock/db.json",
+    "port": 8081,
+    "routes": "mock/routes.json"
+  }
+  

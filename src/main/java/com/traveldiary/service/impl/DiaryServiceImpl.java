@@ -7,9 +7,11 @@ import com.traveldiary.service.DiaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,23 +37,23 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     @Override
-    public Page<Diary> getDiariesByUser(User user, Pageable pageable) {
-        return diaryRepository.findByUser(user, pageable);
+    public List<Diary> getDiariesByUser(User user) {
+        return diaryRepository.findByUser(user);
     }
 
     @Override
-    public Page<Diary> getAllDiaries(Pageable pageable) {
-        return diaryRepository.findAll(pageable);
+    public List<Diary> getAllDiaries() {
+        return diaryRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
     }
 
     @Override
-    public Page<Diary> getDiariesOrderByViews(Pageable pageable) {
-        return diaryRepository.findAllByOrderByViewsDesc(pageable);
+    public List<Diary> getDiariesOrderByViews() {
+        return diaryRepository.findAllByOrderByViewsDesc();
     }
 
     @Override
-    public Page<Diary> getDiariesOrderByRating(Pageable pageable) {
-        return diaryRepository.findAllByOrderByAverageRatingDesc(pageable);
+    public List<Diary> getDiariesOrderByRating() {
+        return diaryRepository.findAllByOrderByAverageRatingDesc();
     }
 
     @Override

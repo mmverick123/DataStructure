@@ -1,11 +1,12 @@
 package com.traveldiary.controller;
 
-import com.traveldiary.model.Diary;
-import com.traveldiary.model.Media;
-import com.traveldiary.payload.response.MessageResponse;
-import com.traveldiary.security.services.UserDetailsImpl;
-import com.traveldiary.service.DiaryService;
-import com.traveldiary.service.MediaService;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -15,15 +16,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
+import com.traveldiary.model.Diary;
+import com.traveldiary.model.Media;
+import com.traveldiary.payload.response.MessageResponse;
+import com.traveldiary.security.services.UserDetailsImpl;
+import com.traveldiary.service.DiaryService;
+import com.traveldiary.service.MediaService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -76,18 +84,15 @@ public class MediaController {
             Resource resource = new UrlResource(path.toUri());
             
             if (resource.exists()) {
-                // 确定内容类型
-                String contentType = null;
+                // 确定内容类型 - 仅支持JPEG图片和MP4视频
+                String contentType;
                 if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
                     contentType = MediaType.IMAGE_JPEG_VALUE;
-                } else if (fileName.endsWith(".png")) {
-                    contentType = MediaType.IMAGE_PNG_VALUE;
-                } else if (fileName.endsWith(".gif")) {
-                    contentType = MediaType.IMAGE_GIF_VALUE;
                 } else if (fileName.endsWith(".mp4")) {
                     contentType = "video/mp4";
                 } else {
-                    contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+                    // 不支持的文件类型
+                    return ResponseEntity.badRequest().body(new MessageResponse("错误: 不支持的文件类型，仅支持JPEG图片和MP4视频"));
                 }
                 
                 return ResponseEntity.ok()
