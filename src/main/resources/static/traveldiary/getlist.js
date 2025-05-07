@@ -6,9 +6,37 @@ document.addEventListener('DOMContentLoaded', function() {
     const usernameSpan = document.getElementById('username');
     const logoutBtn = document.getElementById('logout-btn');
 
-    // 设置当前用户（实际应用中应从登录状态获取）
-    const currentUser = { username: 'iwenwiki' };
-    usernameSpan.textContent = currentUser.username;
+    // 从 localStorage 获取当前用户（如果不存在则跳转到登录页）
+    function getCurrentUser() {
+        const userJson = localStorage.getItem('user');
+        if (!userJson) {
+            // 如果没有登录，跳转到登录页
+            window.location.href = '../authen/authen.html';
+            return null;
+        }
+
+        try {
+        return JSON.parse(userJson);
+        }catch (e) {
+            console.error('解析用户信息失败', e);
+            localStorage.removeItem('user');
+            window.location.href = '../authen/authen.html';
+            return null;
+        }
+    }
+
+    const currentUser = getCurrentUser();
+
+    if (currentUser) {
+        usernameSpan.textContent = currentUser.username;
+    } else {
+        // 如果未登录或解析失败，getCurrentUser 已处理跳转
+        throw new Error("用户未登录");
+    }
+    const token = localStorage.getItem('token');
+    if (!token) {
+     window.location.href = '../authen/authen.html';
+    }
 
     // 退出登录功能
     logoutBtn.addEventListener('click', function() {
@@ -36,7 +64,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 获取日记列表
     function fetchDiaries(orderType = 'views') {
-        fetch(`/api/diaries/all?orderType=${orderType}`)
+        //fetch(`/api/diaries?orderType=${orderType}`)
+        fetch('http://localhost:8081/api/diaries/all')
             .then(response => {
                 if (!response.ok) throw new Error('网络响应不正常');
                 return response.json();

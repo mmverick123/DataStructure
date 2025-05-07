@@ -1,0 +1,202 @@
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: #333;
+  }
+  
+  header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  #logout-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+  
+  .upload-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  h1 {
+    color: #4CAF50;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  
+  input[type="text"],
+  textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  textarea {
+    min-height: 200px;
+    resize: vertical;
+  }
+  
+  .file-upload {
+    margin-top: 0.5rem;
+  }
+  
+  #media-files {
+    display: none;
+  }
+  
+  .upload-btn {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 1rem;
+  }
+  
+  .upload-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .file-info {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .file-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .preview-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 120px;
+  }
+  
+  .preview-item img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  
+  .video-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .preview-item span {
+    font-size: 0.8rem;
+    text-align: center;
+    word-break: break-all;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  #submit-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  #submit-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .cancel-btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background-color: #f1f1f1;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #ddd;
+  }
+  
+  .progress-container {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+  }
+  
+  .progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .progress {
+    height: 100%;
+    background-color: #4CAF50;
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.3s;
+  }
+  
+  .status-message {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 4px;
+  }
+  
+  .status-message.success {
+    background-color: #dff0d8;
+    color: #3c763d;
+  }
+  
+  .status-message.error {
+    background-color: #f2dede;
+    color: #a94442;
+  }
+  
+  .hidden {
+    display: none;
+  }

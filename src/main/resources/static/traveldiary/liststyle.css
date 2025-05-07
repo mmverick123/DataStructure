@@ -109,3 +109,22 @@ footer {
   color: white;
   margin-top: 50px;
 }
+#fixed-upload-btn {
+  position: fixed;
+  right: 30px;             /* 距离右边距 */
+  bottom: 30px;            /* 距离底部边距 */
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  text-decoration: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;           /* 确保在其他内容之上 */
+  transition: background-color 0.3s ease;
+}
+
+#fixed-upload-btn:hover {
+  background-color: #45a049;
+}

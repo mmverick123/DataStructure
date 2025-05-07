@@ -1,4 +1,20 @@
 {
+  "users": [
+    {
+      "id": 1,
+      "username": "testuser",
+      "email": "test@example.com",
+      "password": "test123"
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "title": "First Post",
+      "author": "testuser",
+      "content": "This is my first post"
+    }
+  ],
   "diaries": [
     {
       "id": 1,
@@ -73,6 +89,14 @@
           "fileUrl": "/api/media/files/rain_night.mp4",
           "fileSize": 512000,
           "mediaType": "VIDEO"
+        },
+        {
+          "id": 3,
+          "fileName": "rain_day.mp4",
+          "fileType": "video/mp4",
+          "fileUrl": "/api/media/files/rain_day.mp4",
+          "fileSize": 512000,
+          "mediaType": "VIDEO"
         }
       ],
       "ratings": [
@@ -93,6 +117,145 @@
           }
         }
       ]
-    }
-  ]
+    },
+    
+      {
+        "id": 3,
+        "title": "山间小路",
+        "content": "今天爬山时走了一条安静的小路，空气清新，拍了好多照片。",
+        "createdAt": "2023-04-05T08:45:00",
+        "updatedAt": "2023-04-05T09:10:00",
+        "views": 67,
+        "averageRating": 4.8,
+        "ratingCount": 5,
+        "user": {
+          "id": 3,
+          "username": "mountain_goer",
+          "email": "mountain@example.com"
+        },
+        "mediaList": [
+          {
+            "id": 101,
+            "fileName": "path1.jpg",
+            "fileType": "image/jpeg",
+            "fileUrl": "/api/media/files/path1.jpg",
+            "fileSize": 2048,
+            "mediaType": "IMAGE"
+          },
+          {
+            "id": 102,
+            "fileName": "stream.mp4",
+            "fileType": "video/mp4",
+            "fileUrl": "/api/media/files/stream.mp4",
+            "fileSize": 1048576,
+            "mediaType": "VIDEO"
+          }
+        ],
+        "ratings": [
+          {
+            "id": 201,
+            "score": 5,
+            "user": {
+              "id": 4,
+              "username": "nature_fan"
+            }
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "城市夜景",
+        "content": "夜幕降临后的城市别有一番风味，灯光璀璨，非常迷人。",
+        "createdAt": "2023-05-10T22:00:00",
+        "updatedAt": "2023-05-10T22:30:00",
+        "views": 89,
+        "averageRating": 4.6,
+        "ratingCount": 4,
+        "user": {
+          "id": 4,
+          "username": "city_lights",
+          "email": "city@example.com"
+        },
+        "mediaList": [
+          {
+            "id": 103,
+            "fileName": "night1.jpg",
+            "fileType": "image/jpeg",
+            "fileUrl": "/api/media/files/night1.jpg",
+            "fileSize": 1800,
+            "mediaType": "IMAGE"
+          },
+          {
+            "id": 104,
+            "fileName": "night2.jpg",
+            "fileType": "image/jpeg",
+            "fileUrl": "/api/media/files/night2.jpg",
+            "fileSize": 1900,
+            "mediaType": "IMAGE"
+          },
+          {
+            "id": 105,
+            "fileName": "night_scene.mp4",
+            "fileType": "video/mp4",
+            "fileUrl": "/api/media/files/night_scene.mp4",
+            "fileSize": 2097152,
+            "mediaType": "VIDEO"
+          }
+        ],
+        "ratings": [
+          {
+            "id": 202,
+            "score": 4.5,
+            "user": {
+              "id": 5,
+              "username": "urban_walker"
+            }
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "书店一角",
+        "content": "在老书店发现了很多有趣的旧书，安静而有味道。",
+        "createdAt": "2023-06-01T14:20:00",
+        "updatedAt": "2023-06-01T14:40:00",
+        "views": 34,
+        "averageRating": 4.2,
+        "ratingCount": 3,
+        "user": {
+          "id": 5,
+          "username": "book_lover",
+          "email": "book@example.com"
+        },
+        "mediaList": [
+          {
+            "id": 106,
+            "fileName": "bookshelf.jpg",
+            "fileType": "image/jpeg",
+            "fileUrl": "/api/media/files/bookshelf.jpg",
+            "fileSize": 1300,
+            "mediaType": "IMAGE"
+          },
+          {
+            "id": 107,
+            "fileName": "cozy_corner.jpg",
+            "fileType": "image/jpeg",
+            "fileUrl": "/api/media/files/cozy_corner.jpg",
+            "fileSize": 1450,
+            "mediaType": "IMAGE"
+          }
+        ],
+        "ratings": [
+          {
+            "id": 203,
+            "score": 4,
+            "user": {
+              "id": 6,
+              "username": "quiet_reader"
+            }
+          }
+        ]
+      }
+    ]
+  
 }

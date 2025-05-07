@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.accessToken) {
                 // 保存token和用户信息
-                localStorage.setItem('token', data.token);
+                localStorage.setItem('token', data.accessToken);
                 localStorage.setItem('user', JSON.stringify({
                     id: data.id,
                     username: data.username,
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 3秒后跳转到home.html
                 setTimeout(() => {
                     window.location.href = '../index.html';
-                }, 3000);
+                }, 15000);
             }
         })
         .catch(error => {

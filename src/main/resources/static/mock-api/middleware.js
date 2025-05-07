@@ -1,4 +1,4 @@
-/*const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 
 const dbFile = path.join(__dirname, 'db.json');
@@ -52,26 +52,4 @@ module.exports = (req, res, next) => {
 
   next();
 };
-*/
-const fs = require('fs');
-const path = require('path');
 
-module.exports = (req, res, next) => {
-  if (req.method === 'POST' && req.path === '/api/diaries') {
-    // 忽略请求体内容，直接返回全部 diaries
-    const dbPath = path.join(__dirname, 'db.json');
-    try {
-      const db = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
-      const diaries = db.diaries || [];
-
-      res.setHeader('Content-Type', 'application/json');
-      res.statusCode = 200;
-      res.end(JSON.stringify(diaries));
-    } catch (err) {
-      res.statusCode = 500;
-      res.end(JSON.stringify({ error: '读取数据库失败' }));
-    }
-  } else {
-    next(); // 继续执行 json-server 默认处理
-  }
-};

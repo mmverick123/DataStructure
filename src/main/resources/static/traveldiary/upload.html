@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>上传旅行日记</title>
+  <link rel="stylesheet" href="uploadstyle.css">
+</head>
+<body>
+  <header>
+    <div class="user-info">
+      <span id="username"></span>
+      <button id="logout-btn">退出登录</button>
+    </div>
+  </header>
+
+  <div class="upload-container">
+    <h1>上传旅行日记</h1>
+    
+    <form id="diary-form">
+      <div class="form-group">
+        <label for="title">日记标题</label>
+        <input type="text" id="title" name="title" required maxlength="100">
+      </div>
+      
+      <div class="form-group">
+        <label for="content">日记内容</label>
+        <textarea id="content" name="content" rows="10" required></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>上传媒体文件</label>
+        <div class="file-upload">
+          <input type="file" id="media-files" multiple accept="image/jpeg, video/mp4">
+          <label for="media-files" class="upload-btn">选择文件</label>
+          <span class="file-info">支持JPEG图片和MP4视频，单个文件不超过10MB</span>
+        </div>
+        <div id="file-preview" class="file-preview"></div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" id="submit-btn">发布日记</button>
+        <a href="list.html" class="cancel-btn">取消</a>
+      </div>
+    </form>
+    
+    <div id="progress-container" class="progress-container hidden">
+      <div class="progress-bar">
+        <div id="progress" class="progress"></div>
+      </div>
+      <span id="progress-text">0%</span>
+    </div>
+    
+    <div id="status-message" class="status-message hidden"></div>
+  </div>
+
+  <script src="upload.js"></script>
+</body>
+</html>
