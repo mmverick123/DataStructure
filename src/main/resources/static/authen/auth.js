@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 3秒后跳转到home.html
                 setTimeout(() => {
                     window.location.href = '../index.html';
-                }, 15000);
+                }, 3000);
             }
         })
         .catch(error => {
