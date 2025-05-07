@@ -1,20 +1,4 @@
 {
-  "users": [
-    {
-      "id": 1,
-      "username": "testuser",
-      "email": "test@example.com",
-      "password": "test123"
-    }
-  ],
-  "posts": [
-    {
-      "id": 1,
-      "title": "First Post",
-      "author": "testuser",
-      "content": "This is my first post"
-    }
-  ],
   "diaries": [
     {
       "id": 1,
