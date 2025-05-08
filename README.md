@@ -75,7 +75,20 @@ src/main/java/com/traveldiary/
 
 src/main/resources/
 ├── static/         # 静态资源
-│   └── traveldiary/  # 前端文件
+│   ├── traveldiary/  # 旅行日记前端文件
+│   │   ├── diary.html      # 日记详情页面
+│   │   ├── diary.js        # 日记详情逻辑
+│   │   ├── diarystyle.css  # 日记详情样式
+│   │   ├── list.html       # 日记列表页面
+│   │   ├── getlist.js      # 日记列表逻辑
+│   │   ├── liststyle.css   # 日记列表样式
+│   │   ├── upload.html     # 日记上传页面
+│   │   ├── upload.js       # 日记上传逻辑
+│   │   └── uploadstyle.css # 日记上传样式
+│   ├── authen/     # 认证相关前端文件
+│   ├── home/       # 首页相关前端文件
+│   ├── index.html  # 主页面
+│   └── homestyles.css  # 主页面样式
 └── application.properties  # 配置文件
 ```
 
@@ -92,6 +105,7 @@ src/main/resources/
    - 删除日记
    - 浏览日记列表
    - 查看日记详情
+   - 日记评分系统（0.5-5.0分）
 
 3. 媒体管理
    - 上传图片和视频
@@ -99,8 +113,9 @@ src/main/resources/
    - 删除媒体文件
 
 4. 评分系统
-   - 为日记评分
+   - 为日记评分（0.5-5.0分，步长0.5）
    - 查看评分统计
+   - 实时更新评分显示
 
 ## API文档
 
