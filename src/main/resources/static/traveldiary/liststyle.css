@@ -1,3 +1,21 @@
+#back-to-home-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  background-color: #4CAF50; /* 和上传按钮一致 */
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 16px;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+#back-to-home-btn:hover {
+  background-color: #45a049; /* 悬停时变深绿 */
+}
 body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;

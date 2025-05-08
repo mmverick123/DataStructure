@@ -25,7 +25,18 @@
      margin-top: 30px;
      display: block;
  }
-
+.diary-date{
+    font-size: 0.9em;
+     color: #aaa;
+     margin-top: 30px;
+     display: block;
+}
+.diary-stats{
+    font-size: 0.9em;
+     color: #aaa;
+     margin-top: 30px;
+     display: block;
+}
  .back-button {
      display: inline-block;
      margin-top: 20px;
@@ -82,22 +93,41 @@
     border-radius: 4px;
     cursor: pointer;
 }
-
 .media-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
-        margin-bottom: 30px;
-        min-height: 200px;/* 固定最小高度 */
-        max-height: 400px;/* 最大高度限制 */
-        overflow: hidden;/* 超出部分隐藏 */
-    }
-    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    min-height: 200px;   /* 固定最小高度 */
+    max-height: 400px;   /* 最大高度限制 */
+    overflow: hidden;    /* 超出部分隐藏 */
+}
+
 .diary-media {
-        max-width: 100%;/* 避免超出容器 */
-        max-height: 400px;/* 图片最大高度 */
-        object-fit: contain; /* 自动适配比例 */
-        border-radius: 8px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    }
+    max-width: 100%;     /* 避免超出容器 */
+    max-height: 400px;   /* 图片最大高度 */
+    object-fit: contain; /* 自动适配比例 */
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+.rating-section {
+    margin-top: 20px;
+    padding: 15px;
+    border-top: 1px solid #ccc;
+}
+
+.star-rating {
+    font-size: 24px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.star-rating span {
+    padding: 0 4px;
+}
+
+.star-rating span:hover,
+.star-rating span.active {
+    color: gold;
+}

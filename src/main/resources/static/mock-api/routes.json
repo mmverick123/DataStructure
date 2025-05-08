@@ -3,6 +3,6 @@
   "/api/auth/signup": "/signup",
   "/api/users/:id": "/users/:id",
   "/api/posts": "/posts",
-  "/api/diaries": "/diaries",
+  "/api/diaries/all": "/diaries",
   "/api/diaries/:id": "/diaries/:id"
 }
