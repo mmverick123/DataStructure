@@ -18,6 +18,10 @@ public interface DiaryService {
     List<Diary> getDiariesOrderByViews();
     
     List<Diary> getDiariesOrderByRating();
+
+    List<Diary> getDiariesOrderByTitle(String keyword);
+    
+    List<Diary> getDiariesByLocation(String location);
     
     Diary updateDiary(Diary diary);
     

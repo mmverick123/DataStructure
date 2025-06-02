@@ -12,6 +12,7 @@ import com.traveldiary.model.Diary;
 import com.traveldiary.model.User;
 import com.traveldiary.repository.DiaryRepository;
 import com.traveldiary.service.DiaryService;
+import com.traveldiary.utils.QuickSortUtils;
 
 @Service
 public class DiaryServiceImpl implements DiaryService {
@@ -47,12 +48,38 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     public List<Diary> getDiariesOrderByViews() {
-        return diaryRepository.findAllByOrderByViewsDesc();
+        List<Diary> diaries = diaryRepository.findAll();
+        QuickSortUtils.sortByViews(diaries);
+        return diaries;
     }
 
     @Override
     public List<Diary> getDiariesOrderByRating() {
-        return diaryRepository.findAllByOrderByAverageRatingDesc();
+        List<Diary> diaries = diaryRepository.findAll();
+        QuickSortUtils.sortByRating(diaries);
+        return diaries;
+    }
+
+    @Override
+    public List<Diary> getDiariesOrderByTitle(String keyword) {
+        List<Diary> diaries = diaryRepository.findAll();
+        return QuickSortUtils.searchAndSortByTitle(diaries, keyword);
+    }
+
+    @Override
+    public List<Diary> getDiariesByLocation(String location) {
+        if (location == null || location.trim().isEmpty()) {
+            return List.of();
+        }
+        
+        List<Diary> diaries = diaryRepository.findAll();
+        return diaries.stream()
+                .filter(diary -> {
+                    String diaryLocation = diary.getLocation();
+                    return diaryLocation != null && diaryLocation.toLowerCase().contains(location.toLowerCase());
+                })
+                .sorted((d1, d2) -> d2.getCreatedAt().compareTo(d1.getCreatedAt()))
+                .toList();
     }
 
     @Override

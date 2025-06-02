@@ -11,6 +11,8 @@ public class DiaryRequest {
     @NotBlank
     private String content;
     
+    private String location;
+    
     public DiaryRequest() {
     }
     
@@ -28,5 +30,13 @@ public class DiaryRequest {
     
     public void setContent(String content) {
         this.content = content;
+    }
+    
+    public String getLocation() {
+        return location;
+    }
+    
+    public void setLocation(String location) {
+        this.location = location;
     }
 } 

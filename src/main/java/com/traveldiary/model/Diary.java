@@ -62,6 +62,9 @@ public class Diary {
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Rating> ratings = new HashSet<>();
 
+    @Column(name = "location")
+    private String location;
+
     public Diary() {
     }
     
@@ -155,5 +158,13 @@ public class Diary {
     
     public Set<Rating> getRatings() {
         return ratings;
+    }
+    
+    public String getLocation() {
+        return location;
+    }
+    
+    public void setLocation(String location) {
+        this.location = location;
     }
 } 

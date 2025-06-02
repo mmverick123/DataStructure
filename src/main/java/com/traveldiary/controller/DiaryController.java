@@ -85,6 +85,18 @@ public class DiaryController {
         }
     }
 
+    @GetMapping("/diary/search_title/{title}")
+    public ResponseEntity<?> getDiariesByTitle(@PathVariable String title) {
+        List<Diary> diaries = diaryService.getDiariesOrderByTitle(title);
+        return ResponseEntity.ok(diaries);
+    }
+    
+    @GetMapping("/location/{location}")
+    public ResponseEntity<?> getDiariesByLocation(@PathVariable String location) {
+        List<Diary> diaries = diaryService.getDiariesByLocation(location);
+        return ResponseEntity.ok(diaries);
+    }
+
     @PostMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> createDiary(@Valid @RequestBody DiaryRequest diaryRequest) {
@@ -97,6 +109,7 @@ public class DiaryController {
             Diary diary = new Diary();
             diary.setTitle(diaryRequest.getTitle());
             diary.setContent(diaryRequest.getContent());
+            diary.setLocation(diaryRequest.getLocation());
             
             Diary createdDiary = diaryService.createDiary(diary, user.get());
             return ResponseEntity.ok(createdDiary);
@@ -127,6 +140,7 @@ public class DiaryController {
             // 更新日记内容
             diary.setTitle(diaryRequest.getTitle());
             diary.setContent(diaryRequest.getContent());
+            diary.setLocation(diaryRequest.getLocation());
             
             Diary updatedDiary = diaryService.updateDiary(diary);
             return ResponseEntity.ok(updatedDiary);

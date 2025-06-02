@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>景区导航系统</title>
+    <link rel="stylesheet" href="navigatestyle.css">
+</head>
+<body>
+  <!-- 返回主页按钮 -->
+  <a href="../index.html" id="back-to-home-btn">返回主页</a>
+  
+  <header>
+    <div class="user-info">
+      <span id="username">管理员</span>
+      <button id="logout-btn">退出登录</button>
+    </div>
+  </header>
+  
+  <!-- 主内容区 -->
+  <div class="main-container">
+    <!-- 左侧地图 -->
+    <div class="map-container">
+      <div id="map"></div>
+    </div>
+    
+    <!-- 右侧面板 -->
+    <div class="right-panel">
+      <!-- 搜索区域 -->
+      <div class="control-panel">
+        <h2>导航设置</h2>
+        
+        <div class="input-group">
+          <label for="start-point">起点位置</label>
+          <div class="search-box">
+            <input type="text" id="start-point" placeholder="输入起点位置">
+            <button id="search-start-btn">搜索</button>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label for="end-point">终点位置</label>
+          <div class="search-box">
+            <input type="text" id="end-point" placeholder="输入终点位置">
+            <button id="search-end-btn">搜索</button>
+          </div>
+        </div>
+        
+        <div id="waypoints-container">
+          <!-- 中间点将通过JS动态添加 -->
+        </div>
+        
+        <div class="button-group">
+          <button id="add-waypoint-btn">添加中间点</button>
+          <button id="plan-route-btn">规划路线</button>
+        </div>
+      </div>
+      
+      <!-- 路径信息 -->
+      <div class="route-info">
+        <h3>路线信息</h3>
+        <div id="route-details">
+          <p>请先设置起点和终点，然后点击"规划路线"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div id="search-results-popup" class="search-results-popup">
+        <div class="popup-header">
+            <span>搜索结果</span>
+                <button id="close-popup-btn">×</button>
+        </div>
+        <div id="search-results-list" class="popup-content">
+        <!-- 搜索结果将通过 JS 动态生成 -->
+        <p>请输入关键词进行搜索</p>
+        </div>
+    </div>
+  
+  <footer>
+    <p>© 2025 景区导航系统</p>
+  </footer>
+
+  <!-- 引入高德地图API -->
+  <script src="https://webapi.amap.com/maps?v=2.0&key=eaf5c2fa731dcd9b3ab32020e248e1aa"></script>
+  <script src="navigate.js"> </script>
+</body>
+</html>

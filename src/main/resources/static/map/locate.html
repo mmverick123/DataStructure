@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>地图搜索定位系统</title>
+  <link rel="stylesheet" href="locatestyle.css">
+</head>
+<body>
+  <!-- 返回主页按钮 -->
+  <a href="../index.html" id="back-to-home-btn">返回主页</a>
+  
+  <header>
+    <div class="user-info">
+      <span id="username">管理员</span>
+      <button id="logout-btn">退出登录</button>
+    </div>
+  </header>
+  
+  <!-- 主内容区 -->
+  <div class="main-container">
+    <!-- 左侧地图 -->
+    <div class="map-container">
+      <div id="map"></div>
+    </div>
+    
+    <!-- 右侧面板 -->
+    <div class="right-panel">
+      <!-- 搜索区域 -->
+      <div class="search-panel">
+        <h2>位置搜索</h2>
+        <div class="search-box">
+          <input type="text" id="search-input" placeholder="输入地点名称或地址">
+          <button id="search-btn">搜索</button>
+        </div>
+        <div class="input-group">
+          <label>当前坐标：</label>
+          <span id="current-coords">未选择</span>
+        </div>
+      </div>
+      
+      <!-- 结果列表 -->
+      <div class="results-panel">
+        <h3>搜索结果</h3>
+        <div id="results-list">
+          <!-- 结果将通过JS动态生成 -->
+          <div class="no-results">请输入关键词进行搜索</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer>
+    <p>© 2025 地图搜索系统 | 使用腾讯地图API</p>
+  </footer>
+
+  <!-- 引入腾讯地图API -->
+  <script src="https://map.qq.com/api/gljs?v=1.exp&key=DEABZ-7BGKB-N7FUG-NGGLJ-BICGV-IIBQG"></script>
+  <script src="locate.js"> </script> 
+</body>
+</html>
