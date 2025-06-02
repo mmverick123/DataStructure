@@ -225,3 +225,17 @@
 .result-item:hover {
   background-color: #f5f5f5;
 }
+.route-mode {
+  margin-bottom: 15px;
+}
+
+.route-mode label {
+  font-weight: bold;
+}
+
+#routeMode {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}

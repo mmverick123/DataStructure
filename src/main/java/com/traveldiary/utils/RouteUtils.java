@@ -51,24 +51,23 @@ public class RouteUtils {
             
             visited.add(current);
             
-            for (Map.Entry<GraphNode, GraphNode.Edge> entry : current.getNeighbors().entrySet()) {
-                GraphNode neighbor = entry.getKey();
-                GraphNode.Edge edge = entry.getValue();
+            for (GraphNode.Neighbor neighbor : current.getNeighbors()) {
+                GraphNode neighborNode = neighbor.getNode();
                 
-                if (visited.contains(neighbor)) {
+                if (visited.contains(neighborNode)) {
                     continue;
                 }
                 
-                double newDistance = distances.get(current) + edge.getDistance();
+                double newDistance = distances.get(current) + neighbor.getDistance();
                 
-                if (newDistance < distances.get(neighbor)) {
-                    distances.put(neighbor, newDistance);
-                    previousNodes.put(neighbor, current);
-                    previousRoads.put(neighbor, edge.getRoadName());
+                if (newDistance < distances.get(neighborNode)) {
+                    distances.put(neighborNode, newDistance);
+                    previousNodes.put(neighborNode, current);
+                    previousRoads.put(neighborNode, neighbor.getRoadName());
                     
                     // 更新队列
-                    queue.remove(neighbor);
-                    queue.add(neighbor);
+                    queue.remove(neighborNode);
+                    queue.add(neighborNode);
                 }
             }
         }
@@ -110,18 +109,21 @@ public class RouteUtils {
      * @return 路径规划结果
      */
     public static RouteResult findMultiPointPath(List<GraphNode> graph, GraphNode start, List<GraphNode> waypoints) {
-        List<GraphNode> allPoints = new ArrayList<>(waypoints);
-        if (!allPoints.contains(start)) {
-            allPoints.add(start);
-        }
+        // 深度拷贝途径点列表，避免修改原始列表
+        List<GraphNode> unvisited = new ArrayList<>(waypoints);
         
         List<String> pathNames = new ArrayList<>();
         List<Location> visitedLocations = new ArrayList<>();
+        
+        // 添加起点
         visitedLocations.add(start.getLocation());
+        pathNames.add(start.getLocation().getName());
         
         double totalDistance = 0;
         GraphNode current = start;
-        Set<GraphNode> unvisited = new HashSet<>(waypoints);
+        
+        System.out.println("开始多点路径规划，起点: " + start.getLocation().getName());
+        System.out.println("途径点: " + unvisited.stream().map(n -> n.getLocation().getName()).toList());
         
         // 使用贪心策略找到路径
         while (!unvisited.isEmpty()) {
@@ -140,28 +142,67 @@ public class RouteUtils {
             }
             
             if (nearest == null) {
-                // 无法到达任何未访问点
+                // 无法到达任何未访问点，中断循环
+                System.out.println("无法到达任何未访问点，中断循环");
                 break;
             }
             
-            // 更新路径
-            pathNames.addAll(tempResult.getPathNames());
-            visitedLocations.addAll(tempResult.getWaypoints());
+            System.out.println("找到最近点: " + nearest.getLocation().getName() + ", 距离: " + minDistance);
+            
+            // 添加路径名称（如果有）
+            if (tempResult.getPathNames() != null && !tempResult.getPathNames().isEmpty()) {
+                pathNames.addAll(tempResult.getPathNames());
+            }
+            
+            // 添加途径点（但不包括起点，因为已经添加过了）
+            if (tempResult.getWaypoints() != null && !tempResult.getWaypoints().isEmpty()) {
+                // 跳过第一个点，因为它是当前点，已经在路径中了
+                for (int i = 1; i < tempResult.getWaypoints().size(); i++) {
+                    visitedLocations.add(tempResult.getWaypoints().get(i));
+                }
+            }
+            
+            // 添加目标点名称
+            pathNames.add(nearest.getLocation().getName());
+            
+            // 累计距离
             totalDistance += minDistance;
             
+            // 更新当前点
             current = nearest;
+            // 从未访问列表中移除
             unvisited.remove(nearest);
         }
         
-        // 最后返回起点
-        if (current != start) {
+        // 返回起点的路径
+        if (!current.equals(start)) {
+            System.out.println("添加返回起点的路径");
             RouteResult finalLeg = findShortestPath(graph, current, start);
             if (finalLeg != null) {
-                pathNames.addAll(finalLeg.getPathNames());
-                visitedLocations.addAll(finalLeg.getWaypoints());
+                // 添加路径名称
+                if (finalLeg.getPathNames() != null && !finalLeg.getPathNames().isEmpty()) {
+                    pathNames.addAll(finalLeg.getPathNames());
+                }
+                
+                // 添加途径点（但不包括起点，因为已经添加过了）
+                if (finalLeg.getWaypoints() != null && !finalLeg.getWaypoints().isEmpty()) {
+                    // 跳过第一个点，因为它是当前点，已经在路径中了
+                    for (int i = 1; i < finalLeg.getWaypoints().size(); i++) {
+                        visitedLocations.add(finalLeg.getWaypoints().get(i));
+                    }
+                }
+                
+                // 添加起点名称（作为终点）
+                pathNames.add(start.getLocation().getName());
+                
+                // 累计距离
                 totalDistance += finalLeg.getDistance();
             }
         }
+        
+        // 打印最终路径
+        System.out.println("最终路径: " + pathNames);
+        System.out.println("总距离: " + totalDistance + "米");
         
         return new RouteResult(
             start.getLocation(),
