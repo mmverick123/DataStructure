@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 获取日记列表
     function fetchDiaries(orderType = 'views') {
         //fetch(`http://localhost:8081/api/diaries/all?orderType=${orderType}`)
-        fetch('http://localhost:8081/api/diaries/all')
+        fetch(`http://localhost:8081/api/diaries/all?orderType=${orderType}`)
             .then(response => {
                 if (!response.ok) throw new Error('网络响应不正常');
                 return response.json();

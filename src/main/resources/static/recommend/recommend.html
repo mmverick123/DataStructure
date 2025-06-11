@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>旅游推荐</title>
+  <link rel="stylesheet" href="../traveldiary/liststyle.css">
+  <link rel="stylesheet" href="recommendstyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <!-- 返回主页按钮 -->
+  <a href="../index.html" id="back-to-home-btn">返回主页</a>
+  
+  <header>
+    <div class="header-container">
+      <div class="logo">旅游分享平台</div>
+      <div class="user-info">
+        <span id="username"></span>
+        <button id="logout-btn">退出登录</button>
+      </div>
+    </div>
+  </header>
+  
+  <div class="search-wrapper">
+    <div class="search-container">
+      <div class="search-box">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="search-input" placeholder="输入景点或学校名称、类别、关键字等">
+        <button id="search-btn">搜索</button>
+      </div>
+      
+      <div class="search-params">
+        <div class="param-row">
+          <span class="param-label">排序方式：</span>
+          <div class="param-options sort-options">
+            <label class="param-option">
+              <input type="radio" name="sort" id="sort-popularity" checked>
+              <span>热度</span>
+            </label>
+            <label class="param-option">
+              <input type="radio" name="sort" id="sort-rating">
+              <span>评价</span>
+            </label>
+            <label class="param-option">
+              <input type="radio" name="sort" id="sort-comprehensive">
+              <span>综合</span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="param-row">
+          <span class="param-label">景点类别：</span>
+          <div class="param-options category-options">
+            <label class="param-option">
+              <input type="checkbox" id="category-history">
+              <span>历史文化</span>
+            </label>
+            <label class="param-option">
+              <input type="checkbox" id="category-nature">
+              <span>自然风光</span>
+            </label>
+            <label class="param-option">
+              <input type="checkbox" id="category-garden">
+              <span>园林景观</span>
+            </label>
+            <label class="param-option">
+              <input type="checkbox" id="category-education">
+              <span>教育机构</span>
+            </label>
+            <label class="param-option">
+              <input type="checkbox" id="category-commercial">
+              <span>商业区域</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="main-content">
+    <!-- 左侧筛选选项 -->
+    <div class="sidebar">
+      <h3>推荐选项</h3>
+      <div class="sidebar-options">
+        <label class="sidebar-option active">
+          <input type="radio" name="recommend-filter" id="filter-hot" checked>
+          <span>热门</span>
+        </label>
+        <label class="sidebar-option">
+          <input type="radio" name="recommend-filter" id="filter-top-rated">
+          <span>高分</span>
+        </label>
+        <label class="sidebar-option">
+          <input type="radio" name="recommend-filter" id="filter-comprehensive">
+          <span>综合</span>
+        </label>
+      </div>
+    </div>
+    
+    <!-- 右侧内容区域 -->
+    <div class="content-area">
+      <!-- 搜索结果区域 -->
+      <div id="search-result" style="display: none;">
+        <div class="result-header">
+          <h2>搜索结果</h2>
+          <button id="close-search" class="close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="result-container">
+          <div class="map-container">
+            <div id="map"></div>
+            <a href="navigate.html" id="nav-btn" class="nav-btn">导航到此处</a>
+          </div>
+          <div class="diary-container" id="related-diaries">
+            <!-- 相关日记将通过JS动态生成 -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- 推荐区域 -->
+      <div id="recommendation-section">
+        <h2 class="recommend-title">推荐旅游景点和学校</h2>
+        <div class="blog-grid" id="recommend-container">
+          <!-- 推荐内容将通过JS动态生成 -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 固定上传按钮 -->
+  <a href="upload.html" id="fixed-upload-btn">写日记</a>
+  
+  <footer>
+    <p>© 2025 旅游分享平台</p>
+  </footer>
+  
+  <!-- 引入高德地图API -->
+  <script src="https://webapi.amap.com/maps?v=2.0&key=eaf5c2fa731dcd9b3ab32020e248e1aa"></script>
+  <script src="recommend.js"></script>
+</body>
+</html>

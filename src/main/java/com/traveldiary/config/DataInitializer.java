@@ -47,6 +47,8 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private RatingRepository ratingRepository;
     
+
+    
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
 
     @Override
@@ -160,6 +162,8 @@ public class DataInitializer implements CommandLineRunner {
             System.err.println("读取初始数据失败: " + e.getMessage());
             e.printStackTrace();
         }
+
+
     }
     
     // 使用反射设置私有字段的值
@@ -168,4 +172,6 @@ public class DataInitializer implements CommandLineRunner {
         field.setAccessible(true);
         field.set(object, value);
     }
+
+
 } 

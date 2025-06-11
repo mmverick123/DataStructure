@@ -390,6 +390,289 @@
   }
   ```
 
+## 景点推荐相关接口
+
+### 获取所有景点
+- **URL**: `/api/attractions`
+- **方法**: GET
+- **描述**: 获取所有景点（基于现有日记动态生成）
+- **实现说明**: 系统会自动分析现有日记的location字段，动态生成景点数据并计算统计信息
+- **响应**:
+  ```json
+  [
+    {
+      "id": 1,
+      "name": "故宫博物院",
+      "description": "基于旅游日记生成的景点",
+      "category": "历史文化",
+      "location": "故宫博物院",
+      "keywords": "故宫博物院,历史,文化,古建筑",
+      "totalViews": 15000,
+      "averageRating": 4.8,
+      "diaryCount": 120,
+      "createdAt": "2024-01-01T10:00:00",
+      "updatedAt": "2024-01-01T10:00:00",
+      "imageUrls": [
+        "/api/media/files/d8e8fca2-dc0f-4a9e-8431-6092f8571b6c_image1.jpg",
+        "/api/media/files/a1e0f78b-dc0f-4a9e-8431-6092f8571b6c_image2.jpg",
+        "/api/media/files/c4f2e6d5-dc0f-4a9e-8431-6092f8571b6c_image3.jpg"
+      ]
+    }
+  ]
+  ```
+
+- **字段说明**:
+  - `totalViews`: 相关日记的总阅读量，用于热度排序
+  - `averageRating`: 相关日记的平均评分，用于评价排序 
+  - `imageUrls`: 景点相关图片URL列表，前端展示时通常使用第一张图片
+
+### 根据ID获取景点
+- **URL**: `/api/attractions/{id}`
+- **方法**: GET
+- **描述**: 获取指定ID的景点详情
+- **响应**: 景点对象
+
+### 创建新景点
+- **URL**: `/api/attractions`
+- **方法**: POST
+- **描述**: 手动创建新景点
+- **请求体**:
+  ```json
+  {
+    "name": "景点名称",
+    "description": "景点描述",
+    "category": "景点类别",
+    "location": "景点位置",
+    "keywords": "关键词1,关键词2,关键词3"
+  }
+  ```
+- **响应**: 创建的景点对象
+
+### 更新景点信息
+- **URL**: `/api/attractions/{id}`
+- **方法**: PUT
+- **描述**: 更新景点信息
+- **请求体**:
+  ```json
+  {
+    "name": "更新后的景点名称",
+    "description": "更新后的描述",
+    "category": "更新后的类别",
+    "location": "更新后的位置",
+    "keywords": "更新后的关键词"
+  }
+  ```
+- **响应**: 更新后的景点对象
+
+### 删除景点
+- **URL**: `/api/attractions/{id}`
+- **方法**: DELETE
+- **描述**: 删除景点
+- **响应**:
+  ```json
+  {
+    "message": "景点删除成功!"
+  }
+  ```
+
+### 搜索景点（高级搜索）
+- **URL**: `/api/attractions/search`
+- **方法**: POST
+- **描述**: 高级景点搜索，支持多种排序算法
+- **请求体**:
+  ```json
+  {
+    "searchTerm": "搜索关键词",
+    "category": "景点类别",
+    "sortBy": "views|rating|composite",
+    "limit": 10,
+    "useTopK": true,
+    "viewsWeight": 0.6,
+    "ratingWeight": 0.4
+  }
+  ```
+- **参数说明**:
+  - `searchTerm`: 搜索关键词（可选）
+  - `category`: 景点类别（可选）
+  - `sortBy`: 排序方式
+    - `views`: 按热度排序
+    - `rating`: 按评价排序
+    - `composite`: 按综合评分排序
+  - `limit`: 返回结果数量限制（1-50，默认10）
+  - `useTopK`: 是否使用Top-K算法（默认true）
+  - `viewsWeight`: 热度权重（0-1，默认0.6）
+  - `ratingWeight`: 评价权重（0-1，默认0.4）
+- **算法说明**:
+  - **Top-K算法**: 时间复杂度O(n log k)，只获取前K个结果，适合用户通常只看前10个景点的场景
+  - **快速排序**: 时间复杂度O(n log n)，完整排序
+- **响应**: 排序后的景点对象列表
+
+### 搜索景点（简单搜索）
+- **URL**: `/api/attractions/search`
+- **方法**: GET
+- **描述**: 简单景点搜索
+- **参数**:
+  - `searchTerm`: 搜索关键词（可选）
+  - `category`: 景点类别（可选）
+  - `sortBy`: 排序方式，默认"views"
+  - `limit`: 返回结果数量，默认10
+  - `useTopK`: 是否使用Top-K算法，默认true
+- **响应**: 景点对象列表数组（直接返回数组，不包含在data字段中）
+- **前端用法示例**:
+  ```javascript
+  // 前端代码使用示例
+  const API_BASE_URL = 'http://localhost:8081/api';
+  const keyword = "北京大学";
+  const sortBy = "views"; // 可选值: views, rating, composite
+  const category = "education"; // 可选值: history, nature, garden, education, commercial
+  
+  const url = `${API_BASE_URL}/attractions/search?searchTerm=${encodeURIComponent(keyword)}&sortBy=${sortBy}&category=${category}&limit=10`;
+  
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data && data.length > 0) {
+        // 使用第一个结果
+        const attraction = data[0];
+        // 在地图上标记位置
+        markLocation([attraction.location.lng, attraction.location.lat], attraction.name);
+      }
+    });
+  ```
+
+### 获取热门推荐景点
+- **URL**: `/api/attractions/recommendations/popular`
+- **方法**: GET
+- **描述**: 获取按热度推荐的景点（基于相关日记的总阅读量）
+- **参数**:
+  - `limit`: 返回结果数量，默认10
+- **算法说明**: 使用Top-K堆排序算法，时间复杂度O(n log k)
+- **响应**: 景点对象列表数组（直接返回数组，不包含在data字段中）
+- **前端用法示例**:
+  ```javascript
+  // 前端代码使用示例
+  const API_BASE_URL = 'http://localhost:8081/api';
+  const url = `${API_BASE_URL}/attractions/recommendations/popular?limit=12`;
+  
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data) {
+        // 直接使用返回的数组渲染
+        renderAttractions(data, recommendContainer);
+      }
+    });
+  ```
+
+### 获取高评分推荐景点
+- **URL**: `/api/attractions/recommendations/top-rated`
+- **方法**: GET
+- **描述**: 获取按评价推荐的景点（基于相关日记的平均评分）
+- **参数**:
+  - `limit`: 返回结果数量，默认10
+- **算法说明**: 使用Top-K堆排序算法，时间复杂度O(n log k)
+- **响应**: 景点对象列表数组（直接返回数组，不包含在data字段中）
+- **前端用法示例**:
+  ```javascript
+  // 前端代码使用示例
+  const API_BASE_URL = 'http://localhost:8081/api';
+  const url = `${API_BASE_URL}/attractions/recommendations/top-rated?limit=12`;
+  
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data) {
+        // 直接使用返回的数组渲染
+        renderAttractions(data, recommendContainer);
+      }
+    });
+  ```
+
+### 获取综合推荐景点
+- **URL**: `/api/attractions/recommendations/composite`
+- **方法**: GET
+- **描述**: 获取按综合评分推荐的景点（热度和评价的加权平均）
+- **参数**:
+  - `limit`: 返回结果数量，默认10
+  - `viewsWeight`: 热度权重，默认0.6
+  - `ratingWeight`: 评价权重，默认0.4
+- **算法说明**: 使用Top-K堆排序算法，支持自定义权重的综合评分
+- **响应**: 景点对象列表数组（直接返回数组，不包含在data字段中）
+- **前端用法示例**:
+  ```javascript
+  // 前端代码使用示例
+  const API_BASE_URL = 'http://localhost:8081/api';
+  const url = `${API_BASE_URL}/attractions/recommendations/composite?limit=12`;
+  
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data) {
+        // 直接使用返回的数组渲染
+        renderAttractions(data, recommendContainer);
+      }
+    });
+  ```
+
+### 更新所有景点统计数据
+- **URL**: `/api/attractions/update-statistics`
+- **方法**: POST
+- **描述**: 手动触发更新所有景点的统计数据
+- **实现说明**: 重新分析所有日记，更新景点的热度、评价等统计信息
+- **响应**:
+  ```json
+  {
+    "message": "景点统计数据更新完成"
+  }
+  ```
+
+### 更新单个景点统计数据
+- **URL**: `/api/attractions/{id}/update-statistics`
+- **方法**: POST
+- **描述**: 更新指定景点的统计数据
+- **响应**:
+  ```json
+  {
+    "message": "景点统计数据更新完成"
+  }
+  ```
+
+## 景点推荐系统说明
+
+### 数据来源
+景点推荐系统完全基于现有的旅游日记数据：
+- **景点生成**: 自动分析日记的location字段，动态生成景点列表
+- **热度计算**: 相关日记的总阅读量
+- **评价计算**: 相关日记的平均评分
+- **关联判断**: 通过景点名称、位置、关键词与日记内容匹配
+
+### 排序算法
+系统实现了两种高效的排序算法：
+
+#### Top-K 堆排序算法
+- **时间复杂度**: O(n log k)
+- **空间复杂度**: O(k)
+- **适用场景**: 只需要前K个结果，不需要完整排序
+- **实现方式**: 使用最小堆维护前K个最大值
+- **优势**: 对于用户通常只看前10个景点的场景，性能优于完整排序
+
+#### 快速排序算法
+- **时间复杂度**: 平均O(n log n)，最坏O(n²)
+- **适用场景**: 需要完整排序的情况
+- **实现方式**: 递归分治，支持按热度和评价排序
+
+### 景点类别自动推断
+系统会根据景点名称自动推断类别：
+- **历史文化**: 博物馆、故宫、寺、庙、古城、古镇、遗址
+- **自然风光**: 山、湖、海、河、森林、公园、峡谷
+- **园林景观**: 园、花园
+- **教育机构**: 大学、学校、学院
+- **商业区域**: 商场、购物、街
+- **其他景点**: 未匹配的其他类型
+
+### 关键词自动提取
+系统会从相关日记的标题和内容中自动提取关键词，用于搜索和匹配。
+
 ## 错误响应
 所有错误响应的格式如下:
 ```json

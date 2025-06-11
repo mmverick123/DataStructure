@@ -73,7 +73,8 @@ src/main/java/com/traveldiary/
 ├── repository/     # 数据访问层
 ├── security/       # 安全相关
 ├── service/        # 业务逻辑层
-└── utils/          # 工具类，包含排序算法
+├── utils/          # 工具类，包含排序算法
+└── payload/        # 请求响应模型
 
 src/main/resources/
 ├── static/         # 静态资源
@@ -122,7 +123,18 @@ src/main/resources/
    - 查看评分统计
    - 实时更新评分显示
 
-5. 路径规划功能
+5. 景点推荐系统
+   - 基于现有日记数据动态生成景点列表
+   - 按热度推荐景点（基于相关日记的总阅读量）
+   - 按评价推荐景点（基于相关日记的平均评分）
+   - 综合评分推荐（热度和评价的加权平均）
+   - 智能搜索功能（按景点名称、类别、关键词搜索）
+   - 使用Top-K堆排序算法优化前10个结果的获取效率
+   - 支持快速排序算法进行完整排序
+   - 自动景点类别推断和关键词提取
+   - 景点相关图片列表（自动从相关日记收集景点图片）
+
+6. 路径规划功能
    - 景点之间的路径规划
    - 多点路径规划
    - 基于高德地图API的位置查询和路径计算
@@ -136,6 +148,43 @@ src/main/resources/
    - 避免使用数据库排序，减轻数据库负担
    - 支持按浏览量、评分和标题进行排序
    - 时间复杂度为O(n log n)，空间复杂度为O(log n)
+
+2. 景点推荐算法优化
+   - **Top-K堆排序算法**: 时间复杂度O(n log k)，专门优化前K个结果的获取
+   - **快速排序算法**: 时间复杂度O(n log n)，用于完整排序
+   - **动态景点生成**: 基于现有日记数据实时生成景点，无需预置数据
+   - **智能关联算法**: 通过名称、位置、关键词匹配日记与景点的关联关系
+
+## 景点推荐系统使用示例
+
+### 1. 获取热门景点推荐
+```bash
+curl -X GET "http://localhost:8081/api/attractions/recommendations/popular?limit=5"
+```
+
+### 2. 搜索特定类别的景点
+```bash
+curl -X GET "http://localhost:8081/api/attractions/search?category=历史文化&sortBy=views&limit=5"
+```
+
+### 3. 高级搜索（使用POST方式）
+```bash
+curl -X POST "http://localhost:8081/api/attractions/search" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "searchTerm": "北京",
+    "sortBy": "composite",
+    "limit": 5,
+    "useTopK": true,
+    "viewsWeight": 0.7,
+    "ratingWeight": 0.3
+  }'
+```
+
+### 4. 更新景点统计数据
+```bash
+curl -X POST "http://localhost:8081/api/attractions/update-statistics"
+```
 
 ## API文档
 
@@ -182,3 +231,12 @@ src/main/resources/
 ## 许可证
 
 MIT License
+
+## 最近更新
+
+### 2025-06-11
+- 修复了前端推荐系统API调用路径
+- 更新了API文档，明确了返回格式
+- 修复了景点搜索接口的参数名称匹配问题
+- 修复了推荐系统中图片URL显示问题（将attraction.image改为使用attraction.imageUrls[0]）
+- 更正了景点评分和热度的字段名称（将popularity和rating改为totalViews和averageRating）
