@@ -31,13 +31,17 @@
       <div class="form-group">
         <label>上传媒体文件</label>
         <div class="file-upload">
-          <input type="file" id="media-files" multiple accept="image/jpeg, video/mp4">
+          <input type="file" id="media-files" accept="image/jpeg, video/mp4">
           <label for="media-files" class="upload-btn">选择文件</label>
           <span class="file-info">支持JPEG图片和MP4视频，单个文件不超过10MB</span>
         </div>
         <div id="file-preview" class="file-preview"></div>
+        <div class="ai-upload-container">
+          <button type="button" id="ai-generate-btn" class="ai-generate-btn">AI生成图片</button>
+          <div id="ai-image-preview" class="file-preview"></div>
+        </div>
       </div>
-      <!-- 在上传媒体文件下方插入 -->
+      
     <div class="form-group">
         <label for="location">选择位置</label>
         <div class="input-group">

@@ -143,30 +143,13 @@
 }
 
 .sort-controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.sort-btn {
-  background-color: #f1f1f1;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.sort-btn:hover {
-  background-color: #e0e0e0;
-}
-
-.sort-btn.active {
-  background-color: #4CAF50;
-  color: white;
+  display: none;
 }
 
 #related-diary-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
   max-height: 600px;
   overflow-y: auto;
   padding-right: 10px;
@@ -272,6 +255,27 @@
   font-size: 18px;
 }
 
+.modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.clear-chat-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.clear-chat-btn:hover {
+  opacity: 1;
+}
+
 .close-modal {
   font-size: 24px;
   cursor: pointer;
@@ -327,7 +331,7 @@
   color: #2196F3;
 }
 
-.message-content {
+.ai-message .message-content {
   background-color: #f5f5f5;
   padding: 10px 15px;
   border-radius: 18px;
@@ -336,6 +340,32 @@
 
 .user-message .message-content {
   background-color: #e3f2fd;
+}
+
+/* 错误消息样式 */
+.ai-message.error .message-content {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+/* 加载动画 */
+.ai-message.typing .message-content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ai-message.typing .message-content p::after {
+  content: "";
+  animation: thinking 1.5s infinite;
+  display: inline-block;
+}
+
+@keyframes thinking {
+  0% { content: "."; }
+  33% { content: ".."; }
+  66% { content: "..."; }
+  100% { content: ""; }
 }
 
 .ai-input-container {
@@ -433,6 +463,8 @@
   margin-bottom: 20px;
   overflow: hidden;
   transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
 }
 
 .diary-card:hover {
@@ -444,16 +476,25 @@
   display: block;
   color: inherit;
   text-decoration: none;
+  height: 100%;
 }
 
 .diary-content {
   padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .diary-title {
   color: #1976d2; /* 蓝色系标题 */
   font-size: 18px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .diary-excerpt {
@@ -461,19 +502,22 @@
   font-size: 14px;
   margin-bottom: 15px;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  flex-grow: 1;
+  line-height: 1.5;
 }
 
 .diary-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 12px 20px;
   background-color: #f5f5f5;
-  font-size: 12px;
+  font-size: 13px;
   color: #777;
+  border-top: 1px solid #eee;
 }
 
 .diary-author {
@@ -482,14 +526,16 @@
 }
 
 .diary-author-avatar {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background-color: #e0e0e0;
   margin-right: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #555;
+  font-size: 14px;
 }
 
 .diary-stats {
@@ -504,4 +550,188 @@
 
 .diary-stat i {
   margin-right: 5px;
+  color: #4CAF50;
+}
+
+/* 当没有日记时显示的提示 */
+.no-diaries-message {
+  text-align: center;
+  padding: 30px;
+  color: #999;
+  font-style: italic;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  width: 100%;
+}
+
+/* 周边设施样式 */
+.facilities-section {
+  background-color: #fff;
+}
+
+.facilities-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.facility-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 5px;
+}
+
+.facility-type-btn {
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 15px;
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.facility-type-btn i {
+  font-size: 16px;
+}
+
+.facility-type-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.facility-type-btn.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.facilities-list {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.facility-item {
+  display: flex;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.facility-item:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.facility-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.facility-icon i {
+  color: white;
+  font-size: 18px;
+}
+
+.facility-info {
+  flex: 1;
+}
+
+.facility-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.facility-address {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 10px 0;
+}
+
+.facility-meta {
+  display: flex;
+  gap: 15px;
+  font-size: 13px;
+  color: #888;
+}
+
+.facility-distance {
+  display: flex;
+  align-items: center;
+}
+
+.facility-tel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.no-facilities-message, .loading-message, .error-message {
+  text-align: center;
+  padding: 30px;
+  color: #888;
+  font-size: 15px;
+}
+
+.loading-message i {
+  margin-right: 8px;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.facilities-tip {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+}
+
+.facilities-tip i {
+  color: #4CAF50;
+  margin-right: 5px;
+}
+
+/* 设施信息窗口样式 */
+.facility-info-window {
+  max-width: 300px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .facility-filter {
+    justify-content: center;
+  }
+  
+  .facility-item {
+    padding: 12px;
+  }
+  
+  .facility-icon {
+    width: 35px;
+    height: 35px;
+  }
 } 

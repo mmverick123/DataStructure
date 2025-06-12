@@ -172,7 +172,7 @@
   - `title`: 标题关键词
 - **查询参数**:
   - `orderType`: 排序类型，可选值: "views"(按浏览量排序), "rating"(按评分排序)
-- **实现说明**: 使用快速排序算法进行内存中的过滤和排序
+- **实现说明**: 使用自定义搜索算法和归并排序进行内存中的过滤和排序
 - **响应**: 匹配的日记对象列表
 
 ### 按内容搜索日记
@@ -183,7 +183,21 @@
   - `keyword`: 内容关键词
 - **查询参数**:
   - `orderType`: 排序类型，可选值: "views"(按浏览量排序), "rating"(按评分排序)
-- **实现说明**: 使用内存中的全文检索算法，按创建时间降序排序结果
+- **实现说明**: 使用自定义搜索算法和归并排序，按创建时间降序排序结果
+- **响应**: 匹配的日记对象列表
+
+### 高级搜索日记
+- **URL**: `/api/diaries/search/advanced`
+- **方法**: GET
+- **描述**: 同时搜索日记标题和内容
+- **查询参数**:
+  - `keyword`: 搜索关键词
+  - `orderType`: 排序类型，可选值: "views"(按浏览量排序), "rating"(按评分排序)
+- **实现说明**: 
+  - 同时搜索标题和内容，合并结果并去重
+  - 标题匹配的结果优先级高于内容匹配
+  - 使用自定义的归并排序算法
+  - 默认按创建时间降序排序
 - **响应**: 匹配的日记对象列表
 
 ### 按景点搜索日记
@@ -711,13 +725,283 @@
 ### 关键词自动提取
 系统会从相关日记的标题和内容中自动提取关键词，用于搜索和匹配。
 
+## 设施查询接口
+
+### 查询附近设施
+- **URL**: `/api/facilities/nearby/search`
+- **方法**: POST
+- **描述**: 根据中心点经纬度，查询附近的设施（超市、卫生间等）并按距离排序
+- **请求体**:
+  ```json
+  {
+    "longitude": 116.397428,
+    "latitude": 39.90923,
+    "facilityType": "超市|便利店|卫生间|洗手间|厕所",
+    "limit": 20,
+    "radius": 2000
+  }
+  ```
+- **参数说明**:
+  - `longitude`: 经度（必需）
+  - `latitude`: 纬度（必需）
+  - `facilityType`: 设施类型关键词，多个类型用|分隔（可选，默认为"超市|便利店|卫生间|洗手间|厕所"）
+  - `limit`: 返回结果数量限制（可选，默认20，最大50）
+  - `radius`: 搜索半径，单位米（可选，默认2000米，最大5000米）
+- **响应**:
+  ```json
+  {
+    "centerLongitude": 116.397428,
+    "centerLatitude": 39.90923,
+    "facilityType": "超市|便利店|卫生间|洗手间|厕所",
+    "totalCount": 10,
+    "radius": 2000,
+    "facilities": [
+      {
+        "id": "B000A7BD6C",
+        "name": "全家便利店(北京三里屯店)",
+        "type": "购物服务;便利店;便利店",
+        "address": "北京市朝阳区三里屯路19号1层",
+        "longitude": 116.394821,
+        "latitude": 39.910434,
+        "distance": 420.5,
+        "category": "购物服务",
+        "telephone": "010-64165380"
+      },
+      // 更多设施...
+    ]
+  }
+  ```
+- **实现说明**: 
+  - 接口使用高德地图API获取附近设施数据
+  - 使用快速排序算法按距离对结果进行排序
+  - 时间复杂度：O(n log n)
+  - 空间复杂度：O(n)
+
+## 图像生成相关接口
+
+### 基于日记内容生成图片
+
+根据提供的日记ID和提示词，调用通义万相文生图API生成图片。
+
+- **URL:** `/api/image/generate`
+- **方法:** `POST`
+- **请求体:**
+  ```json
+  {
+    "diaryId": 1,
+    "prompt": "一个美丽的湖边风景，有山和树"
+  }
+  ```
+  - `diaryId`: 日记ID（必填）
+  - `prompt`: 图片生成提示词（必填）
+
+- **成功响应:**
+  ```json
+  {
+    "success": true,
+    "imageUrl": "https://dashscope-result-wlcb.oss-cn-wulanchabu.aliyuncs.com/example.png",
+    "originalPrompt": "一个美丽的湖边风景，有山和树",
+    "actualPrompt": "一个宁静美丽的湖边风景，湖水清澈反射着蓝天，周围环绕着青翠的山脉和茂密的树木。光线柔和，场景宁静祥和。"
+  }
+  ```
+  - `imageUrl`: 生成的图片URL地址，有效期24小时
+  - `originalPrompt`: 用户原始提示词
+  - `actualPrompt`: 系统优化后的提示词
+
+- **错误响应:**
+  ```json
+  {
+    "success": false,
+    "error": "错误信息"
+  }
+  ```
+
+### 技术说明
+
+本API使用通义万相文生图V2版API（`wanx2.1-t2i-turbo`模型）以异步方式生成图片。
+
+- **API流程**:
+  1. 接收用户请求的提示词
+  2. 调用通义万相API创建异步任务
+  3. 轮询任务状态（最多60次，间隔5秒）
+  4. 任务完成后返回图片URL
+  5. 前端将图片URL发送到后端
+  6. 后端从URL下载图片并保存到本地服务器
+  7. 返回本地图片的访问路径
+
+- **图片处理说明**:
+  - 通义万相API返回的图片URL有效期为24小时
+  - 系统会自动下载该URL的图片并保存到本地服务器
+  - 用户最终看到的是保存在本地服务器的图片，不受24小时有效期限制
+
+- **注意事项**:
+  - 图片生成通常需要1-3分钟
+  - 若提示"异步任务超时"，请稍后重试
+
+## 数据压缩管理接口
+
+### 获取压缩统计信息
+- **URL**: `/api/compression/statistics`
+- **方法**: GET
+- **描述**: 获取系统中所有日记的压缩统计信息
+- **响应**:
+  ```json
+  {
+    "totalCount": 100,
+    "compressedCount": 75,
+    "partiallyCompressedCount": 10,
+    "uncompressedCount": 15,
+    "compressionPercentage": 75.0,
+    "originalSize": 1048576,
+    "currentSize": 524288,
+    "compressionRatio": 50.0,
+    "spaceSaved": 524288
+  }
+  ```
+- **字段说明**:
+  - `totalCount`: 日记总数
+  - `compressedCount`: 完全压缩的日记数量
+  - `partiallyCompressedCount`: 部分压缩的日记数量
+  - `uncompressedCount`: 未压缩的日记数量
+  - `compressionPercentage`: 压缩百分比
+  - `originalSize`: 原始总大小（字节）
+  - `currentSize`: 当前总大小（字节）
+  - `compressionRatio`: 压缩率（百分比）
+  - `spaceSaved`: 节省的存储空间（字节）
+
+### 批量压缩所有日记
+- **URL**: `/api/compression/compress-all`
+- **方法**: POST
+- **描述**: 批量压缩系统中所有未压缩的日记
+- **响应**:
+  ```json
+  {
+    "success": true,
+    "message": "批量压缩完成",
+    "totalCount": 100,
+    "compressedCount": 25,
+    "alreadyCompressedCount": 75,
+    "originalSize": 262144,
+    "compressedSize": 131072,
+    "compressionRatio": "50.00%",
+    "spaceSaved": 131072
+  }
+  ```
+
+### 批量解压缩所有日记
+- **URL**: `/api/compression/decompress-all`
+- **方法**: POST
+- **描述**: 批量解压缩系统中所有已压缩的日记
+- **响应**:
+  ```json
+  {
+    "success": true,
+    "message": "批量解压缩完成",
+    "totalCount": 100,
+    "decompressedCount": 75,
+    "notCompressedCount": 25
+  }
+  ```
+
+### 检查日记压缩状态
+- **URL**: `/api/compression/diary/{id}/status`
+- **方法**: GET
+- **描述**: 检查指定日记的压缩状态和详细信息
+- **路径参数**:
+  - `id`: 日记ID
+- **响应**:
+  ```json
+  {
+    "success": true,
+    "diaryId": 1,
+    "titleCompressed": true,
+    "contentCompressed": true,
+    "fullyCompressed": true,
+    "originalTitleSize": 50,
+    "originalContentSize": 1000,
+    "currentTitleSize": 35,
+    "currentContentSize": 600,
+    "totalOriginalSize": 1050,
+    "totalCurrentSize": 635,
+    "titleCompressionRatio": 30.0,
+    "contentCompressionRatio": 40.0,
+    "overallCompressionRatio": 39.52,
+    "spaceSaved": 415
+  }
+  ```
+
+### 压缩指定日记
+- **URL**: `/api/compression/diary/{id}/compress`
+- **方法**: POST
+- **描述**: 强制压缩指定的日记（即使已经压缩过）
+- **路径参数**:
+  - `id`: 日记ID
+- **响应**:
+  ```json
+  {
+    "success": true,
+    "message": "日记压缩成功",
+    "diaryId": 1,
+    "originalSize": 1050,
+    "compressedSize": 635,
+    "compressionRatio": 39.52,
+    "spaceSaved": 415
+  }
+  ```
+
+### 解压缩指定日记
+- **URL**: `/api/compression/diary/{id}/decompress`
+- **方法**: POST
+- **描述**: 解压缩指定的日记
+- **路径参数**:
+  - `id`: 日记ID
+- **响应**:
+  ```json
+  {
+    "success": true,
+    "message": "日记解压缩成功",
+    "diaryId": 1,
+    "titleWasCompressed": true,
+    "contentWasCompressed": true,
+    "compressedSize": 635,
+    "decompressedSize": 1050,
+    "sizeIncrease": 415
+  }
+  ```
+
+## 压缩功能技术说明
+
+### GZIP压缩算法
+系统使用标准的GZIP压缩算法对日记的标题和内容进行无损压缩：
+
+- **压缩流程**:
+  1. 将文本转换为UTF-8字节数组
+  2. 使用GZIPOutputStream进行压缩
+  3. 将压缩后的字节数组进行Base64编码
+  4. 添加"GZIP:"前缀标识
+
+- **解压缩流程**:
+  1. 检查文本是否包含"GZIP:"前缀
+  2. 移除前缀并进行Base64解码
+  3. 使用GZIPInputStream进行解压缩
+  4. 将字节数组转换回UTF-8字符串
+
+### 智能压缩策略
+- **长度阈值**: 小于100字节的文本不进行压缩
+- **效果检查**: 压缩后大小超过原大小90%时保持原文本
+- **自动处理**: 创建和更新日记时自动压缩，读取时自动解压缩
+- **透明操作**: 用户无需关心压缩状态，系统自动处理
+
+### 性能特点
+- **压缩率**: 典型中文文本压缩率可达30-70%
+- **处理速度**: 单个日记压缩/解压缩通常在毫秒级完成
+- **内存占用**: 压缩过程内存占用较小，适合批量处理
+- **错误处理**: 压缩/解压缩失败时自动回退到原文本
+
 ## 错误响应
 所有错误响应的格式如下:
 ```json
 {
   "message": "错误信息"
 }
-``` 
- 
-
-
+```

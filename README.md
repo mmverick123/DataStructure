@@ -43,7 +43,13 @@ spring.datasource.password=你的MySQL密码
 
 1. 克隆项目到本地
 2. 进入项目根目录
-3. 使用Maven启动项目（推荐开发时使用）：
+3. 配置通义万相API密钥
+   - 打开 `src/main/resources/application.properties` 文件
+   - 修改以下配置：
+   ```properties
+   dashscope.api.key=你的通义万相API密钥
+   ```
+4. 使用Maven启动项目（推荐开发时使用）：
 ```bash
 mvn clean spring-boot:run
 ```
@@ -111,11 +117,14 @@ src/main/resources/
    - 通过快速排序算法对日记按热度/浏览量进行排序
    - 景点标签功能（为日记添加景点标签）
    - 按景点搜索日记
+   - 根据日记内容生成图片（使用通义万相-文生图V2版API）
+   - **日记内容无损压缩**（使用GZIP算法，自动压缩存储，透明解压缩）
 
 3. 媒体管理
    - 上传图片和视频
    - 查看媒体文件
    - 删除媒体文件
+   - AI生成日记插图（通过通义万相API）
 
 4. 评分系统
    - 为日记评分（0.5-5.0分，步长0.5）
@@ -140,6 +149,14 @@ src/main/resources/
    - 使用Dijkstra算法实现最短路径规划
    - 支持复杂地点名称查询（如"北京邮电大学(海淀校区)"）
 
+7. 数据压缩功能
+   - **GZIP无损压缩算法**：自动压缩日记标题和内容
+   - **智能压缩策略**：短文本不压缩，长文本自动压缩
+   - **透明解压缩**：读取时自动解压缩，对用户完全透明
+   - **压缩统计**：提供详细的压缩率和存储空间节省统计
+   - **批量压缩管理**：支持批量压缩/解压缩所有日记
+   - **单个日记管理**：支持对指定日记进行压缩操作
+
 ## 性能优化
 
 1. 快速排序算法
@@ -153,6 +170,14 @@ src/main/resources/
    - **快速排序算法**: 时间复杂度O(n log n)，用于完整排序
    - **动态景点生成**: 基于现有日记数据实时生成景点，无需预置数据
    - **智能关联算法**: 通过名称、位置、关键词匹配日记与景点的关联关系
+
+3. 数据压缩优化
+   - **GZIP压缩算法**: 使用标准GZIP算法实现无损压缩
+   - **智能压缩阈值**: 小于100字节的文本不压缩，避免负优化
+   - **压缩效果检查**: 压缩后大小超过原大小90%时不压缩
+   - **Base64编码**: 压缩后使用Base64编码确保数据安全存储
+   - **批量处理**: 支持批量压缩操作，提高处理效率
+   - **存储空间节省**: 典型文本压缩率可达30-70%
 
 ## 景点推荐系统使用示例
 
@@ -184,6 +209,87 @@ curl -X POST "http://localhost:8081/api/attractions/search" \
 ```bash
 curl -X POST "http://localhost:8081/api/attractions/update-statistics"
 ```
+
+### 5. 使用通义万相API为日记生成图片
+```bash
+# 异步调用通义万相V2版API生成图片，返回包含图片URL的JSON响应
+# 注意：图片生成过程一般需要1-3分钟，请耐心等待
+curl -X GET "http://localhost:8081/api/image-generation/diary/1" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+### 6. 直接获取生成的图片
+```bash
+curl -X GET "http://localhost:8081/api/image-generation/diary/1/image" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -o generated_image.jpg
+```
+
+### 7. 使用通义万相API根据提示词生成图片
+```bash
+# 异步调用通义万相V2版API生成图片，返回包含图片URL的JSON响应
+# 注意：图片生成过程一般需要1-3分钟，请耐心等待
+curl -X POST "http://localhost:8081/api/image-generation" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "prompt": "风景如画的西湖，夕阳西下，金光洒满湖面"
+  }'
+```
+
+### 8. 使用通义万相API根据提示词生成图片并直接获取图片
+```bash
+# 异步调用通义万相V2版API生成图片，返回重定向到图片URL
+# 注意：图片生成过程一般需要1-3分钟，请耐心等待
+curl -X POST "http://localhost:8081/api/image-generation/image" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "prompt": "风景如画的西湖，夕阳西下，金光洒满湖面"
+  }' \
+  -L -o generated_image.jpg  # -L参数跟随重定向，将图片保存到文件
+```
+
+## 数据压缩功能使用示例
+
+### 1. 获取压缩统计信息
+```bash
+curl -X GET "http://localhost:8081/api/compression/statistics"
+```
+
+### 2. 批量压缩所有日记
+```bash
+curl -X POST "http://localhost:8081/api/compression/compress-all"
+```
+
+### 3. 批量解压缩所有日记
+```bash
+curl -X POST "http://localhost:8081/api/compression/decompress-all"
+```
+
+### 4. 检查指定日记的压缩状态
+```bash
+curl -X GET "http://localhost:8081/api/compression/diary/1/status"
+```
+
+### 5. 压缩指定日记
+```bash
+curl -X POST "http://localhost:8081/api/compression/diary/1/compress"
+```
+
+### 6. 解压缩指定日记
+```bash
+curl -X POST "http://localhost:8081/api/compression/diary/1/decompress"
+```
+
+### 压缩功能特点
+
+- **自动压缩**: 创建和更新日记时自动压缩内容
+- **透明解压**: 读取日记时自动解压缩，用户无感知
+- **智能策略**: 短文本（<100字节）不压缩，避免负优化
+- **效果检查**: 压缩效果不明显时保持原文本
+- **统计监控**: 提供详细的压缩率和空间节省统计
+- **批量管理**: 支持批量压缩/解压缩操作
 
 ## API文档
 
@@ -233,6 +339,11 @@ MIT License
 
 ## 最近更新
 
+### 2025-06-13
+- 添加附近设施查询接口，支持根据经纬度查询附近的超市、卫生间等设施
+- 实现了基于距离的快速排序算法，优化了查询结果的排序效率
+- 集成高德地图API，提供更全面的位置服务
+
 ### 2025-06-12
 - 添加用户密码修改功能，用户可以在登录后安全地修改自己的密码
 - 为按标题搜索、按内容搜索、按景点搜索三个接口添加orderType参数，支持按浏览量或评分排序
@@ -244,3 +355,57 @@ MIT License
 - 修复了景点搜索接口的参数名称匹配问题
 - 修复了推荐系统中图片URL显示问题（将attraction.image改为使用attraction.imageUrls[0]）
 - 更正了景点评分和热度的字段名称（将popularity和rating改为totalViews和averageRating）
+
+## 技术特点
+
+- 基于Spring Boot框架开发
+- Spring Security实现JWT认证鉴权
+- Spring Data JPA实现数据访问层
+- PostgreSQL作为关系型数据库
+- 集成阿里云通义万相文生图V2版API，支持根据日记内容生成相关图片
+- Docker容器化部署
+
+## API接口
+
+API接口文档详见[API_DOCUMENT.md](API_DOCUMENT.md)。
+
+主要功能接口：
+- 用户注册、登录、信息获取
+- 日记创建、更新、删除、查询
+- 日记类别管理
+- 基于通义万相文生图V2版API的图片生成
+
+## 第三方API集成
+
+### 通义万相文生图API
+
+本项目集成了阿里云通义万相文生图V2版API，使用`wanx2.1-t2i-turbo`模型。该API通过异步方式工作：
+
+1. 首先创建图片生成任务获取任务ID
+2. 然后轮询任务状态，直到任务完成或失败
+3. 最终获取生成的图片URL
+4. 自动从URL下载图片并保存到本地服务器
+
+**主要特点**：
+- 异步任务处理，避免HTTP请求超时
+- 任务轮询机制，最多等待5分钟（60次，每次间隔5秒）
+- 自动将24小时有效期的图片URL保存到本地服务器，确保永久可用
+- 完整日志记录，方便调试
+
+**配置方法**：
+在`application.properties`或环境变量中设置：
+```
+# 通义万相API配置
+dashscope.api.key=your_api_key_here
+dashscope.api.url=https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis
+```
+
+**使用示例**：
+```java
+// 注入服务
+@Autowired
+private ImageGenerationService imageGenerationService;
+
+// 调用生成图片
+Map<String, Object> result = imageGenerationService.generateImage("一个美丽的湖边风景，有山和树");
+```

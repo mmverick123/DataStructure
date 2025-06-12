@@ -1,7 +1,10 @@
 package com.traveldiary.controller;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +25,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.traveldiary.model.Diary;
+import com.traveldiary.model.Media;
 import com.traveldiary.model.User;
 import com.traveldiary.payload.request.DiaryRequest;
+import com.traveldiary.payload.request.ImageUrlRequest;
 import com.traveldiary.payload.response.MessageResponse;
 import com.traveldiary.security.services.UserDetailsImpl;
 import com.traveldiary.service.DiaryService;
+import com.traveldiary.service.MediaService;
 import com.traveldiary.service.UserService;
-import com.traveldiary.utils.QuickSortUtils;
+import com.traveldiary.utils.SearchUtils;
 
 import jakarta.validation.Valid;
 
@@ -43,6 +49,9 @@ public class DiaryController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MediaService mediaService;
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllDiaries(
@@ -102,9 +111,9 @@ public class DiaryController {
             // 检查列表是否为空
             if (diaries != null && !diaries.isEmpty() && orderType != null) {
                 if (orderType.equals("views")) {
-                    QuickSortUtils.sortByViews(diaries);
+                    SearchUtils.sortByViewsDesc(diaries);
                 } else if (orderType.equals("rating")) {
-                    QuickSortUtils.sortByRating(diaries);
+                    SearchUtils.sortByRatingDesc(diaries);
                 }
             }
             
@@ -128,9 +137,9 @@ public class DiaryController {
             // 检查列表是否为空
             if (diaries != null && !diaries.isEmpty() && orderType != null) {
                 if (orderType.equals("views")) {
-                    QuickSortUtils.sortByViews(diaries);
+                    SearchUtils.sortByViewsDesc(diaries);
                 } else if (orderType.equals("rating")) {
-                    QuickSortUtils.sortByRating(diaries);
+                    SearchUtils.sortByRatingDesc(diaries);
                 }
             }
             
@@ -154,9 +163,9 @@ public class DiaryController {
             // 检查列表是否为空
             if (diaries != null && !diaries.isEmpty() && orderType != null) {
                 if (orderType.equals("views")) {
-                    QuickSortUtils.sortByViews(diaries);
+                    SearchUtils.sortByViewsDesc(diaries);
                 } else if (orderType.equals("rating")) {
-                    QuickSortUtils.sortByRating(diaries);
+                    SearchUtils.sortByRatingDesc(diaries);
                 }
             }
             
@@ -240,6 +249,119 @@ public class DiaryController {
             return ResponseEntity.ok(new MessageResponse("日记删除成功!"));
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * 保存图片URL到日记
+     * 
+     * @param diaryId 日记ID
+     * @param imageUrlRequest 包含图片URL的请求体
+     * @return 保存结果
+     */
+    @PostMapping("/{diaryId}/imageUrl")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> saveImageUrl(
+            @PathVariable Long diaryId,
+            @Valid @RequestBody ImageUrlRequest imageUrlRequest) {
+        
+        try {
+            // 检查日记是否存在
+            Optional<Diary> optionalDiary = diaryService.getDiaryById(diaryId);
+            if (!optionalDiary.isPresent()) {
+                return ResponseEntity.badRequest().body(new MessageResponse("错误: 日记不存在!"));
+            }
+            
+            Diary diary = optionalDiary.get();
+            
+            // 检查当前用户是否是日记的作者
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            
+            if (!diary.getUser().getId().equals(userDetails.getId())) {
+                return ResponseEntity.badRequest()
+                        .body(new MessageResponse("错误: 无权为他人的日记保存图片URL!"));
+            }
+            
+            // 保存图片URL
+            String imageUrl = imageUrlRequest.getImageUrl();
+            if (imageUrl == null || imageUrl.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body(new MessageResponse("错误: 图片URL不能为空!"));
+            }
+            
+            // 从URL下载图片并保存到本地
+            logger.info("从URL下载并保存图片: {}", imageUrl);
+            Media savedMedia = mediaService.downloadAndSaveImage(imageUrl, diary);
+            
+            return ResponseEntity.ok(savedMedia);
+        } catch (Exception e) {
+            logger.error("保存图片URL失败", e);
+            return ResponseEntity.badRequest()
+                    .body(new MessageResponse("错误: 保存图片URL失败! " + e.getMessage()));
+        }
+    }
+
+    /**
+     * 高级搜索接口 - 同时搜索标题和内容
+     */
+    @GetMapping("/search/advanced")
+    public ResponseEntity<?> advancedSearch(
+            @RequestParam String keyword,
+            @RequestParam(required = false) String orderType) {
+        
+        try {
+            logger.debug("高级搜索关键词 '{}' 的日记，排序方式: {}", keyword, orderType);
+            
+            if (keyword == null || keyword.trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                    .body(new MessageResponse("搜索关键词不能为空"));
+            }
+            
+            // 获取所有日记
+            List<Diary> allDiaries = diaryService.getAllDiaries();
+            List<Diary> result = new ArrayList<>();
+            
+            // 分别搜索标题和内容
+            List<Diary> titleMatches = SearchUtils.searchByTitle(allDiaries, keyword);
+            List<Diary> contentMatches = SearchUtils.searchByContent(allDiaries, keyword);
+            
+            // 合并结果（去重）
+            Set<Long> addedIds = new HashSet<>();
+            
+            // 首先添加标题匹配的（优先级更高）
+            for (Diary diary : titleMatches) {
+                result.add(diary);
+                addedIds.add(diary.getId());
+            }
+            
+            // 然后添加内容匹配但标题未匹配的
+            for (Diary diary : contentMatches) {
+                if (!addedIds.contains(diary.getId())) {
+                    result.add(diary);
+                    addedIds.add(diary.getId());
+                }
+            }
+            
+            // 应用排序
+            if (orderType != null) {
+                if (orderType.equals("views")) {
+                    SearchUtils.sortByViewsDesc(result);
+                } else if (orderType.equals("rating")) {
+                    SearchUtils.sortByRatingDesc(result);
+                } else {
+                    // 默认按创建时间降序排序
+                    SearchUtils.sortByCreatedTimeDesc(result);
+                }
+            } else {
+                // 默认按创建时间降序排序
+                SearchUtils.sortByCreatedTimeDesc(result);
+            }
+            
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            logger.error("高级搜索时出错: {}", e.getMessage(), e);
+            return ResponseEntity.status(500)
+                .body(new MessageResponse("搜索处理过程中发生错误: " + e.getMessage()));
         }
     }
 } 

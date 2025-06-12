@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchBtn = document.getElementById('search-btn');
     const searchTitleBtn = document.getElementById('search-title');
     const searchContentBtn = document.getElementById('search-content');
+    const searchAdvancedBtn = document.getElementById('search-advanced');
     const searchResultInfo = document.getElementById('search-result-info');
     const clearSearchBtn = document.getElementById('clear-search');
     
@@ -94,7 +95,18 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        const searchType = searchTitleBtn.checked ? 'title' : 'content';
+        // 获取搜索类型
+        let searchType;
+        if (searchTitleBtn && searchTitleBtn.checked) {
+            searchType = 'title';
+        } else if (searchContentBtn && searchContentBtn.checked) {
+            searchType = 'content';
+        } else if (searchAdvancedBtn && searchAdvancedBtn.checked) {
+            searchType = 'advanced';
+        } else {
+            searchType = 'title'; // 默认
+        }
+        
         performSearch(keyword, searchType, currentOrderType);
     });
     
@@ -107,7 +119,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            const searchType = searchTitleBtn.checked ? 'title' : 'content';
+            // 获取搜索类型
+            let searchType;
+            if (searchTitleBtn && searchTitleBtn.checked) {
+                searchType = 'title';
+            } else if (searchContentBtn && searchContentBtn.checked) {
+                searchType = 'content';
+            } else if (searchAdvancedBtn && searchAdvancedBtn.checked) {
+                searchType = 'advanced';
+            } else {
+                searchType = 'title'; // 默认
+            }
+            
             performSearch(keyword, searchType, currentOrderType);
         }
     });
@@ -144,9 +167,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (type === 'title') {
             // 按标题搜索
             url = `http://localhost:8081/api/diaries/diary/search_title/${encodeURIComponent(keyword)}?orderType=${orderType}`;
-        } else {
+        } else if (type === 'content') {
             // 按内容搜索
             url = `http://localhost:8081/api/diaries/search/content/${encodeURIComponent(keyword)}?orderType=${orderType}`;
+        } else if (type === 'advanced') {
+            // 高级搜索（同时搜索标题和内容）
+            url = `http://localhost:8081/api/diaries/search/advanced?keyword=${encodeURIComponent(keyword)}&orderType=${orderType}`;
+        } else {
+            // 默认按标题搜索
+            url = `http://localhost:8081/api/diaries/diary/search_title/${encodeURIComponent(keyword)}?orderType=${orderType}`;
         }
         
         fetch(url)

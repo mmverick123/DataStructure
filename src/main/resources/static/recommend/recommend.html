@@ -97,23 +97,6 @@
     
     <!-- 右侧内容区域 -->
     <div class="content-area">
-      <!-- 搜索结果区域 -->
-      <div id="search-result" style="display: none;">
-        <div class="result-header">
-          <h2>搜索结果</h2>
-          <button id="close-search" class="close-btn"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="result-container">
-          <div class="map-container">
-            <div id="map"></div>
-            <a href="navigate.html" id="nav-btn" class="nav-btn">导航到此处</a>
-          </div>
-          <div class="diary-container" id="related-diaries">
-            <!-- 相关日记将通过JS动态生成 -->
-          </div>
-        </div>
-      </div>
-      
       <!-- 推荐区域 -->
       <div id="recommendation-section">
         <h2 class="recommend-title">推荐旅游景点和学校</h2>
@@ -124,15 +107,11 @@
     </div>
   </div>
   
-  <!-- 固定上传按钮 -->
-  <a href="upload.html" id="fixed-upload-btn">写日记</a>
   
   <footer>
     <p>© 2025 旅游分享平台</p>
   </footer>
   
-  <!-- 引入高德地图API -->
-  <script src="https://webapi.amap.com/maps?v=2.0&key=eaf5c2fa731dcd9b3ab32020e248e1aa"></script>
   <script src="recommend.js"></script>
 </body>
 </html>
