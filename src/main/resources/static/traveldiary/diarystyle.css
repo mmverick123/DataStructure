@@ -1,133 +1,314 @@
- .diary-container {
-     max-width: 800px;
-     margin: auto;
-     padding: 40px 20px;
-     background-color: white;
-     border-radius: 8px;
-     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
- }
-
- .diary-title {
-     font-size: 2em;
-     color: #333;
-     margin-bottom: 20px;
- }
-
- .diary-content {
-     font-size: 1.1em;
-     line-height: 1.8;
-     color: #555;
- }
-
- .diary-author {
-     font-size: 0.9em;
-     color: #aaa;
-     margin-top: 30px;
-     display: block;
- }
-.diary-date{
-    font-size: 0.9em;
-     color: #aaa;
-     margin-top: 30px;
-     display: block;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 20px;
 }
-.diary-stats{
-    font-size: 0.9em;
-     color: #aaa;
-     margin-top: 30px;
-     display: block;
-}
- .back-button {
-     display: inline-block;
-     margin-top: 20px;
-     padding: 10px 20px;
-     background-color: #007BFF;
-     color: white;
-     text-decoration: none;
-     border-radius: 5px;
-     transition: background-color 0.3s ease;
- }
 
- .back-button:hover {
-     background-color: #0056b3;
- }
-
- .image-gallery {
-     display: flex;
-     justify-content: center;
-     flex-wrap: wrap;
-     gap: 15px;
-     margin-bottom: 30px;
- }
-
- .diary-image {
-     max-width: 100%;
-     height: auto;
-     border-radius: 8px;
-     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-     transition: transform 0.2s ease;
- }
-
- .diary-image:hover {
-     transform: scale(1.05);
- }
- header {
-    background-color: #4CAF50;
-    color: white;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: flex-end;
+header {
+  background-color: #4CAF50;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .user-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 #logout-btn {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
 }
+
+/* 返回主页按钮样式 */
+#back-to-home-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  padding: 8px 15px;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 14px;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+}
+
+#back-to-home-btn:hover {
+  background-color: #45a049;
+}
+
+.diary-container {
+  max-width: 800px;
+  margin: 30px auto;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.diary-content-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 标题栏样式 */
+.title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.diary-title {
+  font-size: 28px;
+  color: #2c3e50;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.action-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.action-btn:hover {
+  background-color: #45a049;
+}
+
+.delete-diary-btn {
+  background-color: #f44336;
+}
+
+.delete-diary-btn:hover {
+  background-color: #d32f2f;
+}
+
+.diary-content {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+  white-space: pre-wrap;
+}
+
 .media-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 30px;
-    min-height: 200px;   /* 固定最小高度 */
-    max-height: 400px;   /* 最大高度限制 */
-    overflow: hidden;    /* 超出部分隐藏 */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
 }
 
 .diary-media {
-    max-width: 100%;     /* 避免超出容器 */
-    max-height: 400px;   /* 图片最大高度 */
-    object-fit: contain; /* 自动适配比例 */
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  max-width: 100%;
+  max-height: 400px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+.diary-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #666;
+  padding: 15px 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  margin: 20px 0;
+}
+
+.diary-author {
+  font-weight: bold;
+}
+
 .rating-section {
-    margin-top: 20px;
-    padding: 15px;
-    border-top: 1px solid #ccc;
+  margin: 20px 0;
 }
 
 .star-rating {
-    font-size: 24px;
-    cursor: pointer;
-    user-select: none;
+  display: flex;
+  gap: 5px;
+  margin: 10px 0;
+  cursor: pointer;
 }
 
 .star-rating span {
-    padding: 0 4px;
+  color: #ddd;
+  transition: color 0.2s;
 }
 
-.star-rating span:hover,
 .star-rating span.active {
-    color: gold;
+  color: #FFD700;
+}
+
+.star-rating span:hover {
+  color: #FFEB3B;
+}
+
+#submit-rating {
+  margin-top: 10px;
+}
+
+#rating-message {
+  margin-top: 10px;
+  color: #4CAF50;
+}
+
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.back-button, .profile-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #f1f1f1;
+  color: #333;
+  padding: 10px 15px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.back-button:hover, .profile-button:hover {
+  background-color: #e0e0e0;
+}
+
+.error-message {
+  text-align: center;
+  padding: 20px;
+  color: #f44336;
+}
+
+/* 模态框样式 */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 15px 20px;
+  background-color: #f44336;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.close-modal {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancel-btn {
+  background-color: #f1f1f1;
+  color: #333;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .diary-meta {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .title-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .action-btn {
+    align-self: flex-end;
+  }
+  
+  .button-group {
+    flex-direction: column;
+  }
+  
+  .diary-title {
+    font-size: 24px;
+  }
 }

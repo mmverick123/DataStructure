@@ -64,6 +64,12 @@ public class Diary {
 
     @Column(name = "location")
     private String location;
+    
+    @Column(name = "longitude")
+    private Double longitude;
+    
+    @Column(name = "latitude")
+    private Double latitude;
 
     public Diary() {
     }
@@ -166,5 +172,21 @@ public class Diary {
     
     public void setLocation(String location) {
         this.location = location;
+    }
+    
+    public Double getLongitude() {
+        return longitude;
+    }
+    
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+    
+    public Double getLatitude() {
+        return latitude;
+    }
+    
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
     }
 } 

@@ -1,8 +1,8 @@
 package com.traveldiary.service;
 
-import com.traveldiary.model.User;
-
 import java.util.Optional;
+
+import com.traveldiary.model.User;
 
 public interface UserService {
     User registerUser(User user);
@@ -20,4 +20,6 @@ public interface UserService {
     boolean existsByUsername(String username);
     
     boolean existsByEmail(String email);
+    
+    boolean changePassword(Long userId, String currentPassword, String newPassword);
 } 

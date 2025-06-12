@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - 旅游分享平台</title>
+    <link rel="stylesheet" href="profilestyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 返回主页按钮 -->
+    <a href="../index.html" id="back-to-home-btn">返回主页</a>
+    
+    <header>
+        <div class="user-info">
+            <span id="username">加载中...</span>
+            <button id="logout-btn">退出登录</button>
+        </div>
+    </header>
+
+    <main class="profile-container">
+        <h1 class="main-title">个人中心</h1>
+        
+        <!-- 个人信息卡片 -->
+        <section class="profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-basic-info">
+                    <h2 id="profile-username">加载中...</h2>
+                    <p id="profile-email">加载中...</p>
+                    <p id="profile-joined">注册时间：加载中...</p>
+                </div>
+                <button id="edit-profile-btn" class="action-btn">
+                    <i class="fas fa-edit"></i> 修改信息
+                </button>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="diary-count">0</span>
+                    <span class="stat-label">日记数量</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="total-views">0</span>
+                    <span class="stat-label">总浏览量</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="avg-rating">0.0</span>
+                    <span class="stat-label">平均评分</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 我的日记列表 -->
+        <section class="my-diaries-section">
+            <div class="section-header">
+                <h2>我的日记</h2>
+                <a href="../traveldiary/upload.html" class="new-diary-btn">
+                    <i class="fas fa-plus"></i> 写新日记
+                </a>
+            </div>
+            
+            <div class="search-params">
+                <div class="param-row">
+                    <span class="param-label">排序方式：</span>
+                    <div class="param-options sort-options">
+                        <label class="param-option">
+                            <input type="radio" name="sort" id="sort-latest" checked>
+                            <span>最新</span>
+                        </label>
+                        <label class="param-option">
+                            <input type="radio" name="sort" id="sort-views">
+                            <span>热度</span>
+                        </label>
+                        <label class="param-option">
+                            <input type="radio" name="sort" id="sort-rating">
+                            <span>评分</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="blog-container" id="blog-container">
+                <!-- 加载中提示 -->
+                <p id="loading-message">正在加载您的日记...</p>
+                
+                <!-- 日记列表将通过JS动态生成 -->
+            </div>
+        </section>
+    </main>
+    
+    <!-- 修改信息模态框 -->
+    <div id="edit-profile-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>修改个人信息</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="profile-info">基本信息</button>
+                    <button class="tab-btn" data-tab="change-password">修改密码</button>
+                </div>
+                
+                <div id="profile-info" class="tab-content active">
+                    <form id="profile-form">
+                        <div class="form-group">
+                            <label for="edit-username">用户名</label>
+                            <input type="text" id="edit-username" readonly>
+                            <p class="form-hint">用户名不可修改</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-email">邮箱</label>
+                            <input type="email" id="edit-email" readonly>
+                            <p class="form-hint">邮箱不可修改</p>
+                        </div>
+                        <button type="submit" class="submit-btn">保存修改</button>
+                    </form>
+                </div>
+                
+                <div id="change-password" class="tab-content">
+                    <form id="password-form">
+                        <div class="form-group">
+                            <label for="current-password">当前密码</label>
+                            <input type="password" id="current-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-password">新密码</label>
+                            <input type="password" id="new-password" required>
+                            <p class="form-hint">密码长度至少为6位</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password">确认新密码</label>
+                            <input type="password" id="confirm-password" required>
+                        </div>
+                        <button type="submit" class="submit-btn">修改密码</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 旅游分享平台</p>
+    </footer>
+
+    <script src="profile.js"></script>
+</body>
+</html> 

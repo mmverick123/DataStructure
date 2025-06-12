@@ -15,26 +15,13 @@ body {
 header {
   background-color: #4CAF50;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-  padding: 0;
+  padding: 15px 20px;
   position: sticky;
   top: 0;
   z-index: 100;
   width: 100%;
-}
-
-.header-container {
   display: flex;
-  justify-content: space-between; /* 确保logo在左侧，用户信息在右侧 */
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 15px 20px;
-}
-
-.logo {
-  font-size: 22px;
-  font-weight: bold;
-  color: white;
+  justify-content: flex-end;
 }
 
 .user-info {

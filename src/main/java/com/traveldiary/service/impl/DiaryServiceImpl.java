@@ -1,7 +1,9 @@
 package com.traveldiary.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -69,7 +71,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     public List<Diary> getDiariesByLocation(String location) {
         if (location == null || location.trim().isEmpty()) {
-            return List.of();
+            return new ArrayList<>();
         }
         
         List<Diary> diaries = diaryRepository.findAll();
@@ -79,7 +81,17 @@ public class DiaryServiceImpl implements DiaryService {
                     return diaryLocation != null && diaryLocation.toLowerCase().contains(location.toLowerCase());
                 })
                 .sorted((d1, d2) -> d2.getCreatedAt().compareTo(d1.getCreatedAt()))
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Override
+    public List<Diary> searchDiariesByContent(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+        
+        List<Diary> diaries = diaryRepository.findAll();
+        return QuickSortUtils.searchAndSortByContent(diaries, keyword);
     }
 
     @Override

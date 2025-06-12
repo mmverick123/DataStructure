@@ -7,6 +7,58 @@ let waypoints = [];
 let currentInputId = null;
 let tempPreviewMarker = null;
 
+// 页面加载时执行
+document.addEventListener('DOMContentLoaded', function() {
+  // 初始化地图
+  initMap();
+  
+  // 绑定搜索事件
+  bindSearchEvent('start-point');
+  bindSearchEvent('end-point');
+  
+  // 绑定其他按钮事件
+  document.getElementById('add-waypoint-btn').addEventListener('click', addWaypoint);
+  document.getElementById('plan-route-btn').addEventListener('click', planRoute);
+  document.getElementById('close-popup-btn').addEventListener('click', function() {
+    document.getElementById('search-results-popup').style.display = 'none';
+  });
+  
+  // 处理URL参数
+  const urlParams = new URLSearchParams(window.location.search);
+  const destination = urlParams.get('destination');
+  const lng = urlParams.get('lng');
+  const lat = urlParams.get('lat');
+  
+  if (destination) {
+    // 设置目的地为终点
+    const endInput = document.getElementById('end-point');
+    endInput.value = destination;
+    
+    // 如果有经纬度信息，直接设置终点位置
+    if (lng && lat) {
+      console.log('从URL参数设置终点位置:', lng, lat);
+      const position = [parseFloat(lng), parseFloat(lat)];
+      
+      // 设置终点标记
+      if (endMarker) map.remove(endMarker);
+      endMarker = new AMap.Marker({
+        position: position,
+        map: map,
+        content: '<div style="background-color:#F44336;color:white;padding:2px 5px;border-radius:3px;">终点</div>'
+      });
+      
+      // 保存终点位置信息
+      window.endPosition = position;
+      
+      // 将地图中心点设置到目的地
+      map.setZoomAndCenter(15, position);
+    }
+  }
+  
+  // 检查用户登录状态
+  checkAuth();
+});
+
 // 初始化地图
 function initMap() {
   map = new AMap.Map('map', {
@@ -409,31 +461,15 @@ function checkAuth() {
   });
 }
 
-// 页面加载完成后初始化
-window.onload = function () {
-  initMap();
-  checkAuth();
+// 绑定模式切换事件
+document.getElementById('routeMode').addEventListener('change', function () {
+  const mode = this.value;
+  if (mode === 'loop') {
+    document.getElementById('end-point').closest('.input-group').style.display = 'none';
+  } else {
+    document.getElementById('end-point').closest('.input-group').style.display = 'block';
+  }
 
-  bindSearchEvent('start-point');
-  bindSearchEvent('end-point');
-
-  document.getElementById('add-waypoint-btn').addEventListener('click', addWaypoint);
-  document.getElementById('plan-route-btn').addEventListener('click', planRoute);
-
-  // 绑定模式切换事件
-  document.getElementById('routeMode').addEventListener('change', function () {
-    const mode = this.value;
-    if (mode === 'loop') {
-      document.getElementById('end-point').closest('.input-group').style.display = 'none';
-    } else {
-      document.getElementById('end-point').closest('.input-group').style.display = 'block';
-    }
-
-    // 切换模式时清空地图上的标记和路径
-    clearMap();
-  });
-
-  document.getElementById('close-popup-btn').addEventListener('click', function () {
-    document.getElementById('search-results-popup').style.display = 'none';
-  });
-};
+  // 切换模式时清空地图上的标记和路径
+  clearMap();
+});

@@ -5,8 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>日记详情</title>
   <link rel="stylesheet" href="diarystyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+  <!-- 返回主页按钮 -->
+  <a href="../index.html" id="back-to-home-btn">返回主页</a>
+  
   <header>
     <div class="user-info">
         <span id="username"></span>
@@ -19,6 +23,24 @@
     
     <!-- 日记内容将通过JS动态生成 -->
   </div>
+  
+  <!-- 删除确认模态框 -->
+  <div id="delete-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>确认删除</h2>
+        <span class="close-modal">&times;</span>
+      </div>
+      <div class="modal-body">
+        <p>确定要删除这篇日记吗？此操作不可恢复。</p>
+        <div class="modal-buttons">
+          <button id="cancel-delete" class="cancel-btn">取消</button>
+          <button id="confirm-delete" class="delete-btn">删除</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <script src="diary.js"></script>
 </body>
 </html>

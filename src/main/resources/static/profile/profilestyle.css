@@ -1,0 +1,542 @@
+/* 通用样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* 头部样式 */
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#logout-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#logout-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* 返回主页按钮样式 */
+#back-to-home-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 8px 15px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+#back-to-home-btn:hover {
+    background-color: #45a049;
+}
+
+/* 主体内容 */
+.profile-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.main-title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+/* 个人信息卡片样式 */
+.profile-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.profile-header {
+    display: flex;
+    padding: 25px;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    font-size: 40px;
+    color: #666;
+}
+
+.profile-basic-info {
+    flex-grow: 1;
+}
+
+.profile-basic-info h2 {
+    font-size: 22px;
+    margin-bottom: 5px;
+    color: #2c3e50;
+}
+
+.profile-basic-info p {
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.action-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.action-btn:hover {
+    background-color: #45a049;
+}
+
+.profile-stats {
+    display: flex;
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.stat-item {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-right: 1px solid #eee;
+}
+
+.stat-item:last-child {
+    border-right: none;
+}
+
+.stat-value {
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #666;
+}
+
+/* 我的日记部分 */
+.my-diaries-section {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    color: #2c3e50;
+    font-size: 20px;
+}
+
+.new-diary-btn {
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.new-diary-btn:hover {
+    background-color: #45a049;
+}
+
+/* 搜索参数样式 */
+.search-params {
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.param-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.param-label {
+    min-width: 80px;
+    font-size: 14px;
+    color: #666;
+}
+
+.param-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.param-option {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.param-option input {
+    margin-right: 5px;
+}
+
+.param-option span {
+    font-size: 14px;
+}
+
+/* 博客卡片样式 */
+.blog-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.blog-post {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.blog-post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.blog-post-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+}
+
+.blog-title {
+    color: #1976d2;
+    font-size: 18px;
+    margin-bottom: 10px;
+    padding: 15px 15px 0 15px;
+}
+
+.blog-content {
+    color: #555;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 0 15px;
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+.blog-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #eee;
+    font-size: 12px;
+    color: #777;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+    z-index: 2;
+    opacity: 0;
+}
+
+.blog-post:hover .delete-btn {
+    opacity: 1;
+}
+
+.delete-btn:hover {
+    background-color: #f44336;
+    color: white;
+}
+
+/* 作者和统计信息样式 */
+.diary-author {
+    display: flex;
+    align-items: center;
+}
+
+.diary-author-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+}
+
+.diary-stats {
+    display: flex;
+    gap: 15px;
+}
+
+.diary-stat {
+    display: flex;
+    align-items: center;
+}
+
+.diary-stat i {
+    margin-right: 5px;
+    color: #4CAF50;
+}
+
+/* 加载消息 */
+#loading-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+/* 模态框样式 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 8px;
+    width: 500px;
+    max-width: 90%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.modal-header {
+    padding: 15px 20px;
+    background-color: #4CAF50;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.close-modal {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+/* 选项卡样式 */
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    opacity: 0.7;
+    transition: all 0.3s;
+}
+
+.tab-btn.active {
+    opacity: 1;
+    border-bottom: 2px solid #4CAF50;
+    font-weight: bold;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* 表单样式 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.form-group input[readonly] {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.form-hint {
+    font-size: 12px;
+    color: #999;
+    margin-top: 5px;
+}
+
+.submit-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #45a049;
+}
+
+/* 页脚样式 */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #2c3e50;
+    color: white;
+    margin-top: 50px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .profile-avatar {
+        margin: 0 auto 15px;
+    }
+    
+    .action-btn {
+        margin-top: 15px;
+    }
+    
+    .profile-stats {
+        flex-direction: column;
+    }
+    
+    .stat-item {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .stat-item:last-child {
+        border-bottom: none;
+    }
+    
+    .blog-container {
+        grid-template-columns: 1fr;
+    }
+} 

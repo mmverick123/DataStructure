@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>旅行日记</title>
   <link rel="stylesheet" href="liststyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
   <!-- 返回主页按钮 -->
@@ -15,11 +16,59 @@
         <button id="logout-btn">退出登录</button>
     </div>
   </header>
-  <div class="page-container">
-    <div class="sort-controls">
-      <button id="sort-views" class="sort-btn active">按浏览量排序</button>
-      <button id="sort-rating" class="sort-btn">按评分排序</button>
+  
+  <!-- 搜索区域 -->
+  <div class="search-wrapper">
+    <div class="search-container">
+      <div class="search-box">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="search-input" placeholder="输入关键词搜索日记...">
+        <button id="search-btn">搜索</button>
+      </div>
+      
+      <div class="search-params">
+        <div class="param-row">
+          <span class="param-label">搜索范围：</span>
+          <div class="param-options search-options">
+            <label class="param-option">
+              <input type="radio" name="search-type" id="search-title" checked>
+              <span>标题</span>
+            </label>
+            <label class="param-option">
+              <input type="radio" name="search-type" id="search-content">
+              <span>内容</span>
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+  
+  <div class="page-container">
+    <div class="search-params">
+      <div class="param-row">
+        <span class="param-label">排序方式：</span>
+        <div class="param-options sort-options">
+          <label class="param-option">
+            <input type="radio" name="sort" id="sort-views" checked>
+            <span>热度</span>
+          </label>
+          <label class="param-option">
+            <input type="radio" name="sort" id="sort-rating">
+            <span>评分</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 搜索结果提示 -->
+    <div id="search-result-info" class="search-result-info" style="display: none;">
+      <h3>搜索结果</h3>
+      <button id="clear-search" class="clear-search-btn">
+        <i class="fas fa-times"></i> 清除搜索
+      </button>
+    </div>
+    
     <div class="blog-container" id="blog-container">
       <!-- 日记列表将通过JS动态生成 -->
     </div>

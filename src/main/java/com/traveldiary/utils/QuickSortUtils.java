@@ -1,5 +1,6 @@
 package com.traveldiary.utils;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -154,15 +155,39 @@ public class QuickSortUtils {
      */
     public static List<Diary> searchAndSortByTitle(List<Diary> diaries, String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
-            return diaries;
+            return new ArrayList<>(diaries);
         }
         
         String lowercaseKeyword = keyword.toLowerCase();
         
-        // 使用Java 8 Stream API进行过滤和排序
+        // 使用Java 8 Stream API进行过滤和排序，返回可变列表
         return diaries.stream()
                 .filter(diary -> diary.getTitle().toLowerCase().contains(lowercaseKeyword))
                 .sorted(Comparator.comparing(Diary::getTitle))
-                .toList();
+                .collect(java.util.stream.Collectors.toCollection(ArrayList::new));
+    }
+    
+    /**
+     * 根据内容关键词进行全文检索并排序
+     * @param diaries 日记列表
+     * @param keyword 搜索关键词
+     * @return 过滤并排序后的列表
+     */
+    public static List<Diary> searchAndSortByContent(List<Diary> diaries, String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return new ArrayList<>(diaries);
+        }
+        
+        String lowercaseKeyword = keyword.toLowerCase();
+        
+        // 使用Java 8 Stream API进行内容全文检索和排序，返回可变列表
+        // 首先按内容相关性过滤，然后按照创建时间降序排序（最新的排在前面）
+        return diaries.stream()
+                .filter(diary -> {
+                    String content = diary.getContent().toLowerCase();
+                    return content.contains(lowercaseKeyword);
+                })
+                .sorted(Comparator.comparing(Diary::getCreatedAt).reversed())
+                .collect(java.util.stream.Collectors.toCollection(ArrayList::new));
     }
 } 

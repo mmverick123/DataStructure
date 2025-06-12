@@ -3,6 +3,8 @@ package com.traveldiary.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +28,7 @@ import com.traveldiary.payload.response.MessageResponse;
 import com.traveldiary.security.services.UserDetailsImpl;
 import com.traveldiary.service.DiaryService;
 import com.traveldiary.service.UserService;
+import com.traveldiary.utils.QuickSortUtils;
 
 import jakarta.validation.Valid;
 
@@ -33,6 +36,8 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/diaries")
 public class DiaryController {
+    private static final Logger logger = LoggerFactory.getLogger(DiaryController.class);
+    
     @Autowired
     private DiaryService diaryService;
 
@@ -86,15 +91,81 @@ public class DiaryController {
     }
 
     @GetMapping("/diary/search_title/{title}")
-    public ResponseEntity<?> getDiariesByTitle(@PathVariable String title) {
-        List<Diary> diaries = diaryService.getDiariesOrderByTitle(title);
-        return ResponseEntity.ok(diaries);
+    public ResponseEntity<?> getDiariesByTitle(
+            @PathVariable String title,
+            @RequestParam(required = false) String orderType) {
+        
+        try {
+            logger.debug("搜索标题包含 '{}' 的日记，排序方式: {}", title, orderType);
+            List<Diary> diaries = diaryService.getDiariesOrderByTitle(title);
+            
+            // 检查列表是否为空
+            if (diaries != null && !diaries.isEmpty() && orderType != null) {
+                if (orderType.equals("views")) {
+                    QuickSortUtils.sortByViews(diaries);
+                } else if (orderType.equals("rating")) {
+                    QuickSortUtils.sortByRating(diaries);
+                }
+            }
+            
+            return ResponseEntity.ok(diaries);
+        } catch (Exception e) {
+            logger.error("按标题搜索日记时出错: {}", e.getMessage(), e);
+            return ResponseEntity.status(500)
+                .body(new MessageResponse("搜索处理过程中发生错误: " + e.getMessage()));
+        }
     }
     
     @GetMapping("/location/{location}")
-    public ResponseEntity<?> getDiariesByLocation(@PathVariable String location) {
-        List<Diary> diaries = diaryService.getDiariesByLocation(location);
-        return ResponseEntity.ok(diaries);
+    public ResponseEntity<?> getDiariesByLocation(
+            @PathVariable String location,
+            @RequestParam(required = false) String orderType) {
+        
+        try {
+            logger.debug("搜索位置包含 '{}' 的日记，排序方式: {}", location, orderType);
+            List<Diary> diaries = diaryService.getDiariesByLocation(location);
+            
+            // 检查列表是否为空
+            if (diaries != null && !diaries.isEmpty() && orderType != null) {
+                if (orderType.equals("views")) {
+                    QuickSortUtils.sortByViews(diaries);
+                } else if (orderType.equals("rating")) {
+                    QuickSortUtils.sortByRating(diaries);
+                }
+            }
+            
+            return ResponseEntity.ok(diaries);
+        } catch (Exception e) {
+            logger.error("按位置搜索日记时出错: {}", e.getMessage(), e);
+            return ResponseEntity.status(500)
+                .body(new MessageResponse("搜索处理过程中发生错误: " + e.getMessage()));
+        }
+    }
+    
+    @GetMapping("/search/content/{keyword}")
+    public ResponseEntity<?> searchDiariesByContent(
+            @PathVariable String keyword,
+            @RequestParam(required = false) String orderType) {
+        
+        try {
+            logger.debug("搜索内容包含 '{}' 的日记，排序方式: {}", keyword, orderType);
+            List<Diary> diaries = diaryService.searchDiariesByContent(keyword);
+            
+            // 检查列表是否为空
+            if (diaries != null && !diaries.isEmpty() && orderType != null) {
+                if (orderType.equals("views")) {
+                    QuickSortUtils.sortByViews(diaries);
+                } else if (orderType.equals("rating")) {
+                    QuickSortUtils.sortByRating(diaries);
+                }
+            }
+            
+            return ResponseEntity.ok(diaries);
+        } catch (Exception e) {
+            logger.error("按内容搜索日记时出错: {}", e.getMessage(), e);
+            return ResponseEntity.status(500)
+                .body(new MessageResponse("搜索处理过程中发生错误: " + e.getMessage()));
+        }
     }
 
     @PostMapping

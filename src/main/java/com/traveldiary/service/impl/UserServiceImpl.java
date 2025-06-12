@@ -1,14 +1,15 @@
 package com.traveldiary.service.impl;
 
-import com.traveldiary.model.User;
-import com.traveldiary.repository.UserRepository;
-import com.traveldiary.service.UserService;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import com.traveldiary.model.User;
+import com.traveldiary.repository.UserRepository;
+import com.traveldiary.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -64,5 +65,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+    
+    @Override
+    @Transactional
+    public boolean changePassword(Long userId, String currentPassword, String newPassword) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            
+            // 验证当前密码是否正确
+            if (passwordEncoder.matches(currentPassword, user.getPassword())) {
+                // 更新为新密码
+                user.setPassword(passwordEncoder.encode(newPassword));
+                userRepository.save(user);
+                return true;
+            }
+        }
+        return false;
     }
 } 

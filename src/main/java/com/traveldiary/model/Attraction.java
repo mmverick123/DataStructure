@@ -39,6 +39,12 @@ public class Attraction {
 
     @Size(max = 200)
     private String location;
+    
+    @Column(name = "longitude")
+    private Double longitude;
+    
+    @Column(name = "latitude")
+    private Double latitude;
 
     @Column(name = "keywords")
     private String keywords; // 用逗号分隔的关键词
@@ -69,6 +75,17 @@ public class Attraction {
         this.description = description;
         this.category = category;
         this.location = location;
+        this.keywords = keywords;
+    }
+    
+    public Attraction(String name, String description, String category, String location, 
+                     Double longitude, Double latitude, String keywords) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.location = location;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.keywords = keywords;
     }
 
@@ -129,6 +146,22 @@ public class Attraction {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+    
+    public Double getLongitude() {
+        return longitude;
+    }
+    
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+    
+    public Double getLatitude() {
+        return latitude;
+    }
+    
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
     }
 
     public String getKeywords() {

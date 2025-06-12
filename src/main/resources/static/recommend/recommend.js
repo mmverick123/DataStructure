@@ -100,8 +100,42 @@ document.addEventListener('DOMContentLoaded', function() {
     // 创建景点元素
     function createAttractionElement(attraction) {
         const link = document.createElement('a');
-        link.href = `attraction.html?id=${attraction.id}`;
+        link.href = `spot.html?id=${attraction.id}`;
         link.className = 'blog-post-link';
+        
+        // 在点击链接时将景点数据存储到localStorage
+        link.addEventListener('click', function(e) {
+            e.preventDefault(); // 阻止默认跳转
+            
+            // 确保attraction对象包含必要的字段
+            if (!attraction.id || !attraction.name) {
+                console.error('景点数据缺少必要字段:', attraction);
+                alert('景点数据不完整，无法查看详情');
+                return;
+            }
+            
+            // 复制并确保包含必要字段
+            const attractionData = {
+                ...attraction,
+                id: attraction.id,
+                name: attraction.name,
+                category: attraction.category || '未分类',
+                keywords: attraction.keywords || []
+            };
+            
+            console.log('存储到localStorage的景点数据:', attractionData);
+            
+            // 将景点数据存储到localStorage
+            try {
+                localStorage.setItem('currentSpotData', JSON.stringify(attractionData));
+                // 手动跳转
+                window.location.href = `spot.html?id=${attraction.id}`;
+            } catch (error) {
+                console.error('存储景点数据到localStorage失败:', error);
+                // 即使存储失败也尝试跳转
+                window.location.href = `spot.html?id=${attraction.id}`;
+            }
+        });
 
         const post = document.createElement('div');
         post.className = 'blog-post';

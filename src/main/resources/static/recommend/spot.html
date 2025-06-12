@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>景点详情</title>
+  <link rel="stylesheet" href="../traveldiary/liststyle.css">
+  <link rel="stylesheet" href="recommendstyle.css">
+  <link rel="stylesheet" href="spotstyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <!-- 返回主页按钮 -->
+  <a href="../index.html" id="back-to-home-btn">返回主页</a>
+  
+  <header>
+    <div class="user-info">
+      <span id="username"></span>
+      <button id="logout-btn">退出登录</button>
+    </div>
+  </header>
+  
+  <div class="spot-container">
+    <h1 id="spot-name" class="spot-title">景点名称</h1>
+    
+    <!-- 区域一：景点位置地图 -->
+    <section class="spot-section map-section">
+      <h2 class="section-title">景点位置</h2>
+      <div id="spot-map" class="spot-map"></div>
+    </section>
+    
+    <!-- 区域二：景点信息 -->
+    <section class="spot-section info-section">
+      <h2 class="section-title">景点信息</h2>
+      <div class="spot-info">
+        <div class="spot-details">
+          <div class="detail-item">
+            <span class="detail-label">类别：</span>
+            <span id="spot-category" class="detail-value">历史文化</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">关键词：</span>
+            <div id="spot-keywords" class="keyword-tags">
+              <!-- 关键词标签将通过JS动态生成 -->
+            </div>
+          </div>
+        </div>
+        
+        <div class="spot-gallery">
+          <h3>景点图片</h3>
+          <div id="spot-images" class="image-gallery">
+            <!-- 图片将通过JS动态生成 -->
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 区域三：相关日记 -->
+    <section class="spot-section related-section">
+      <h2 class="section-title">相关日记</h2>
+      <div class="sort-controls">
+        <button id="sort-latest" class="sort-btn active">最新</button>
+        <button id="sort-rating" class="sort-btn">高分</button>
+        <button id="sort-views" class="sort-btn">热门</button>
+      </div>
+      <div id="related-diary-container">
+        <!-- 相关日记将通过JS动态生成 -->
+      </div>
+    </section>
+    
+    <!-- 区域四：拓展区域 -->
+    <section class="spot-section extension-section">
+      <h2 class="section-title">更多玩法</h2>
+      <div class="extension-cards">
+        <div class="extension-card">
+          <i class="fas fa-map-signs"></i>
+          <h3>导航前往</h3>
+          <p>规划最佳路线前往景点</p>
+          <a href="../map/navigate.html" class="extension-btn" id="nav-btn">开始导航</a>
+        </div>
+        
+        <div class="extension-card">
+          <i class="fas fa-globe"></i>
+          <h3>官方网站</h3>
+          <p>访问景点官方网站获取更多信息</p>
+          <a href="#" class="extension-btn" id="official-site-btn" target="_blank">访问官网</a>
+        </div>
+        
+        <div class="extension-card">
+          <i class="fas fa-robot"></i>
+          <h3>AI助手</h3>
+          <p>智能规划行程与推荐</p>
+          <button class="extension-btn" id="ai-assistant-btn">咨询AI</button>
+        </div>
+        
+        <div class="extension-card">
+          <i class="fas fa-share-alt"></i>
+          <h3>分享体验</h3>
+          <p>记录你的游览体验</p>
+          <a href="../traveldiary/upload.html" class="extension-btn">写游记</a>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+  <!-- AI助手对话框 -->
+  <div id="ai-assistant-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>AI旅行助手</h2>
+        <span class="close-modal">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div id="ai-chat-container" class="ai-chat-container">
+          <!-- 聊天内容将通过JS动态生成 -->
+          <div class="ai-message">
+            <div class="ai-avatar"><i class="fas fa-robot"></i></div>
+            <div class="message-content">
+              <p>你好！我是你的AI旅行助手。我可以帮你了解更多关于这个景点的信息，规划行程，或推荐附近美食。请问有什么可以帮到你的吗？</p>
+            </div>
+          </div>
+        </div>
+        <div class="ai-input-container">
+          <input type="text" id="ai-input" placeholder="输入问题...">
+          <button id="ai-send-btn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <footer>
+    <p>© 2025 旅游分享平台</p>
+  </footer>
+  
+  <!-- 引入高德地图API -->
+  <script src="https://webapi.amap.com/maps?v=2.0&key=eaf5c2fa731dcd9b3ab32020e248e1aa&plugin=AMap.Scale,AMap.ToolBar,AMap.MapType,AMap.Geocoder,AMap.PlaceSearch"></script>
+  <script src="spot.js"></script>
+</body>
+</html> 

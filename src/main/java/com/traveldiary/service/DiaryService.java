@@ -23,6 +23,8 @@ public interface DiaryService {
     
     List<Diary> getDiariesByLocation(String location);
     
+    List<Diary> searchDiariesByContent(String keyword);
+    
     Diary updateDiary(Diary diary);
     
     void deleteDiary(Long id);

@@ -4,8 +4,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingElement = document.getElementById('loading');
     const usernameSpan = document.getElementById('username');
     const logoutBtn = document.getElementById('logout-btn');
+    
+    // 删除相关元素
+    const deleteModal = document.getElementById('delete-modal');
+    const closeModal = document.querySelector('.close-modal');
+    const cancelDeleteBtn = document.getElementById('cancel-delete');
+    const confirmDeleteBtn = document.getElementById('confirm-delete');
+    
     // 声明selectedRating变量在更高的作用域中
     let selectedRating = null;
+    let currentDiary = null;
+    
     // 从URL获取日记ID
     const urlParams = new URLSearchParams(window.location.search);
     const diaryId = urlParams.get('id');
@@ -50,8 +59,7 @@ if (currentUser) {
 
     // 退出登录功能
     logoutBtn.addEventListener('click', function() {
-        // 实际应用中应清除登录状态并重定向
-        console.log('用户退出登录');
+        clearAuthData();
         window.location.href = '../authen/authen.html';
     });
 
@@ -78,6 +86,7 @@ if (currentUser) {
                 return response.json();
             })
             .then(diary => {
+                currentDiary = diary;
                 loadingElement.style.display = 'none';
                 renderDiary(diary);
             })
@@ -91,12 +100,32 @@ if (currentUser) {
     // 渲染日记详情
     function renderDiary(diary) {
         const diaryElement = document.createElement('div');
+        diaryElement.className = 'diary-content-container';
+        
+        // 标题和操作栏
+        const titleBar = document.createElement('div');
+        titleBar.className = 'title-bar';
         
         // 日记标题
         const titleElement = document.createElement('h1');
         titleElement.className = 'diary-title';
         titleElement.textContent = diary.title;
-        diaryElement.appendChild(titleElement);
+        titleBar.appendChild(titleElement);
+        
+        // 如果当前用户是作者，显示删除按钮
+        if (currentUser && diary.user && currentUser.username === diary.user.username) {
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'action-btn delete-diary-btn';
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i> 删除日记';
+            deleteButton.addEventListener('click', function() {
+                // 打开删除确认模态框
+                deleteModal.style.display = 'flex';
+            });
+            
+            titleBar.appendChild(deleteButton);
+        }
+        
+        diaryElement.appendChild(titleBar);
 
         // 日记内容
         const contentElement = document.createElement('p');
@@ -145,47 +174,62 @@ if (currentUser) {
             </span>
         `;
         diaryElement.appendChild(metaElement);
+        
         // 创建评分区域（星星形式）
-    const ratingSection = document.createElement('div');
-    ratingSection.className = 'rating-section';
+        const ratingSection = document.createElement('div');
+        ratingSection.className = 'rating-section';
 
-    if (diary.user.username !== currentUser.username) {
-        ratingSection.innerHTML = `
-            <p><strong>请为此日记评分：</strong></p>
-            <div class="star-rating" id="star-rating">
-                <span data-value="0.5">⭐</span>
-                <span data-value="1.0">⭐</span>
-                <span data-value="1.5">⭐</span>
-                <span data-value="2.0">⭐</span>
-                <span data-value="2.5">⭐</span>
-                <span data-value="3.0">⭐</span>
-                <span data-value="3.5">⭐</span>
-                <span data-value="4.0">⭐</span>
-                <span data-value="4.5">⭐</span>
-                <span data-value="5.0">⭐</span>
-            </div>
-            <p>当前评分：<span id="current-rating-display">未评分</span></p>
-            <button id="submit-rating">提交评分</button>
-            <p id="rating-message"></p>
-    `;
-    } else {
-    ratingSection.innerHTML = `<p>不能对自己的日记评分。</p>`;
-    }
-    diaryElement.appendChild(ratingSection);
+        if (diary.user.username !== currentUser.username) {
+            ratingSection.innerHTML = `
+                <p><strong>请为此日记评分：</strong></p>
+                <div class="star-rating" id="star-rating">
+                    <span data-value="0.5">⭐</span>
+                    <span data-value="1.0">⭐</span>
+                    <span data-value="1.5">⭐</span>
+                    <span data-value="2.0">⭐</span>
+                    <span data-value="2.5">⭐</span>
+                    <span data-value="3.0">⭐</span>
+                    <span data-value="3.5">⭐</span>
+                    <span data-value="4.0">⭐</span>
+                    <span data-value="4.5">⭐</span>
+                    <span data-value="5.0">⭐</span>
+                </div>
+                <p>当前评分：<span id="current-rating-display">未评分</span></p>
+                <button id="submit-rating" class="action-btn">提交评分</button>
+                <p id="rating-message"></p>
+            `;
+        } else {
+            ratingSection.innerHTML = `<p>不能对自己的日记评分。</p>`;
+        }
+        diaryElement.appendChild(ratingSection);
 
         // 返回按钮
+        const buttonGroup = document.createElement('div');
+        buttonGroup.className = 'button-group';
+        
         const backButton = document.createElement('a');
         backButton.href = 'list.html';
         backButton.className = 'back-button';
-        backButton.textContent = '返回列表';
-        diaryElement.appendChild(backButton);
+        backButton.innerHTML = '<i class="fas fa-arrow-left"></i> 返回列表';
+        buttonGroup.appendChild(backButton);
+        
+        // 如果当前用户是作者，添加前往个人中心按钮
+        if (currentUser && diary.user && currentUser.username === diary.user.username) {
+            const profileButton = document.createElement('a');
+            profileButton.href = '../profile/profile.html';
+            profileButton.className = 'profile-button';
+            profileButton.innerHTML = '<i class="fas fa-user"></i> 前往个人中心';
+            buttonGroup.appendChild(profileButton);
+        }
+        
+        diaryElement.appendChild(buttonGroup);
 
         // 清空容器并添加新内容
         diaryContainer.innerHTML = '';
         diaryContainer.appendChild(diaryElement);
 
         const starRating = document.getElementById('star-rating');
-    const currentRatingDisplay = document.getElementById('current-rating-display');
+        const currentRatingDisplay = document.getElementById('current-rating-display');
         
         //星星交互逻辑
         if (starRating) {
@@ -241,15 +285,71 @@ if (currentUser) {
                 }
             });
         }
-        
-        // 显示错误信息
-        function showError(message) {
-            diaryContainer.innerHTML = `
-                <div class="error-message">
-                    <p>${message}</p>
-                    <a href="list.html" class="back-button">返回列表</a>
-                </div>
-            `;
+    }
+    
+    // 删除日记功能
+    function deleteDiary() {
+        if (!currentDiary || !currentDiary.id) {
+            alert('无法删除，日记ID无效');
+            return;
         }
+        
+        const token = localStorage.getItem('token');
+        
+        fetch(`http://localhost:8081/api/diaries/${currentDiary.id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('删除失败');
+            return response.json();
+        })
+        .then(data => {
+            alert('日记删除成功');
+            // 跳转到日记列表页或个人中心
+            window.location.href = '../profile/profile.html';
+        })
+        .catch(error => {
+            console.error('删除日记失败:', error);
+            alert('删除日记失败，请稍后重试');
+        });
+    }
+    
+    // 删除模态框事件处理
+    if (closeModal) {
+        closeModal.addEventListener('click', function() {
+            deleteModal.style.display = 'none';
+        });
+    }
+    
+    if (cancelDeleteBtn) {
+        cancelDeleteBtn.addEventListener('click', function() {
+            deleteModal.style.display = 'none';
+        });
+    }
+    
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', function() {
+            deleteDiary();
+        });
+    }
+    
+    // 点击模态框外部关闭
+    window.addEventListener('click', function(event) {
+        if (event.target === deleteModal) {
+            deleteModal.style.display = 'none';
+        }
+    });
+        
+    // 显示错误信息
+    function showError(message) {
+        diaryContainer.innerHTML = `
+            <div class="error-message">
+                <p>${message}</p>
+                <a href="list.html" class="back-button">返回列表</a>
+            </div>
+        `;
     }
 });
